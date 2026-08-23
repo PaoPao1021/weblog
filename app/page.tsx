@@ -226,9 +226,15 @@ export default function Home() {
   }, [c.pageTitle]);
 
   useEffect(() => {
-    const close = (event: KeyboardEvent) => event.key === 'Escape' && setSearchOpen(false);
-    window.addEventListener('keydown', close);
-    return () => window.removeEventListener('keydown', close);
+    const handleShortcut = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSearchOpen(false);
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleShortcut);
+    return () => window.removeEventListener('keydown', handleShortcut);
   }, []);
 
   const filteredPosts = useMemo(
