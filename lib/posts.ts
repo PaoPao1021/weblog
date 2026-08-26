@@ -1,4 +1,5 @@
 import type { CategoryId, Language } from './i18n';
+import type { ContentPost } from './content';
 
 type Localized = Record<Language, string>;
 
@@ -19,3 +20,22 @@ export const posts: Post[] = [
   { slug: 'july-collection', title: { zh: '七月收藏夹：让我停下来多看一会儿的事物', en: 'July collection: things worth a longer look' }, excerpt: { zh: '一组近期喜欢的书、网站、声音和生活片段，也是一份写给未来自己的月度切片。', en: 'Books, websites, sounds and small moments I loved lately—a monthly slice saved for my future self.' }, category: 'life', date: '2026.07.30', readTime: { zh: '5 分钟', en: '5 min' }, accent: 'orange', visual: 'sun' },
   { slug: 'first-indie-project', title: { zh: '写给第一次独立做项目的自己', en: 'A note to my first-time indie-builder self' }, excerpt: { zh: '别急着把所有功能塞进第一版。先做出一个能被看见、能被使用的完整小闭环。', en: 'Do not force every feature into version one. Start with one complete loop people can see and use.' }, category: 'project', date: '2026.07.21', readTime: { zh: '7 分钟', en: '7 min' }, accent: 'green', visual: 'orbit' },
 ];
+
+export function toDisplayPosts(source: ContentPost[], allLanguages: ContentPost[]): Post[] {
+  return source.map((post) => {
+    const otherLanguage = post.language === 'zh' ? 'en' : 'zh';
+    const translation = allLanguages.find((item) => item.translationKey === post.translationKey && item.language === otherLanguage) ?? post;
+    const zh = post.language === 'zh' ? post : translation;
+    const en = post.language === 'en' ? post : translation;
+    return {
+      slug: post.slug,
+      title: { zh: zh.title, en: en.title },
+      excerpt: { zh: zh.description, en: en.description },
+      category: post.category,
+      date: post.publishedAt.slice(0, 10).replaceAll('-', '.'),
+      readTime: { zh: `${zh.readingMinutes} 分钟`, en: `${en.readingMinutes} min` },
+      accent: post.accent,
+      visual: post.visual,
+    };
+  });
+}

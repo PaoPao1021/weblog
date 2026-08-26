@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { HomePageClient } from '@/components/HomePageClient';
+import { getPosts, toSearchItems } from '@/lib/content';
 import { dictionaries, isLanguage, languages } from '@/lib/i18n';
+import { toDisplayPosts } from '@/lib/posts';
 
 type Props = { params: Promise<{ lang: string }> };
 
@@ -25,5 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function LocalizedHome({ params }: Props) {
   const { lang } = await params;
   if (!isLanguage(lang)) notFound();
-  return <HomePageClient language={lang} />;
+  const localizedPosts = getPosts(lang);
+  const allPosts = [...getPosts('zh'), ...getPosts('en')];
+  return <HomePageClient language={lang} posts={toDisplayPosts(localizedPosts, allPosts)} searchItems={toSearchItems(localizedPosts)} />;
 }

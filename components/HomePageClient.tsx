@@ -8,9 +8,10 @@ import { Sidebar } from './Sidebar';
 import { SiteFooter } from './SiteFooter';
 import { SiteHeader } from './SiteHeader';
 import { dictionaries, type CategoryId, type Language } from '@/lib/i18n';
-import { posts } from '@/lib/posts';
+import type { Post } from '@/lib/posts';
+import type { SearchItem } from '@/lib/content';
 
-export function HomePageClient({ language }: { language: Language }) {
+export function HomePageClient({ language, posts, searchItems }: { language: Language; posts: Post[]; searchItems: SearchItem[] }) {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -20,10 +21,11 @@ export function HomePageClient({ language }: { language: Language }) {
   useEffect(() => {
     const savedTheme = window.localStorage.getItem('blog-theme');
     const nextTheme = savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-    setTheme(nextTheme);
     document.documentElement.dataset.theme = nextTheme;
     document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
     window.localStorage.setItem('blog-language', language);
+    const frame = window.requestAnimationFrame(() => setTheme(nextTheme));
+    return () => window.cancelAnimationFrame(frame);
   }, [language]);
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export function HomePageClient({ language }: { language: Language }) {
     return () => window.removeEventListener('keydown', handleShortcut);
   }, []);
 
-  const filteredPosts = useMemo(() => category === 'all' ? posts : posts.filter((post) => post.category === category), [category]);
+  const filteredPosts = useMemo(() => category === 'all' ? posts : posts.filter((post) => post.category === category), [category, posts]);
   const toggleTheme = () => {
     const next = theme === 'light' ? 'dark' : 'light';
     setTheme(next);
@@ -47,6 +49,6 @@ export function HomePageClient({ language }: { language: Language }) {
     <a className="skip-link" href="#main-content">{c.skip}</a><div className="ambient ambient-one" /><div className="ambient ambient-two" />
     <SiteHeader c={c} language={language} menuOpen={menuOpen} theme={theme} onMenu={() => setMenuOpen((value) => !value)} onSearch={() => setSearchOpen(true)} onTheme={toggleTheme} onNavigate={() => setMenuOpen(false)} />
     <main id="main-content"><div id="top" /><Hero c={c} /><section className="content-section section-frame" id="articles" aria-labelledby="articles-title"><ArticleList c={c} language={language} category={category} posts={filteredPosts} onCategory={setCategory} /><Sidebar c={c} /></section></main>
-    <SiteFooter c={c} />{searchOpen && <SearchDialog c={c} onClose={() => setSearchOpen(false)} />}
+    <SiteFooter c={c} />{searchOpen && <SearchDialog c={c} language={language} items={searchItems} onClose={() => setSearchOpen(false)} />}
   </div>;
 }
