@@ -42,6 +42,35 @@ body {
   transition: background 220ms ease, color 220ms ease;
 }
 
+.skip-link {
+  position: fixed;
+  z-index: 200;
+  top: 12px;
+  left: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--ink);
+  color: var(--solid);
+  transform: translateY(-150%);
+  transition: transform 160ms ease;
+}
+.skip-link:focus { transform: translateY(0); }
+
+.state-page {
+  display: grid;
+  min-height: 100vh;
+  padding: 32px;
+  place-content: center;
+  justify-items: center;
+  background: var(--paper);
+  color: var(--ink);
+  text-align: center;
+}
+.state-page > span { color: var(--primary); font-family: Georgia, serif; font-size: clamp(72px, 18vw, 150px); line-height: .9; }
+.state-page h1 { margin: 26px 0 8px; font-family: Georgia, 'Songti SC', serif; font-size: clamp(28px, 5vw, 48px); }
+.state-page p { margin: 0 0 28px; color: var(--muted); }
+.state-page button { border: 0; cursor: pointer; }
+
 button, input { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 a { color: inherit; text-decoration: none; }
