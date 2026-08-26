@@ -56,7 +56,7 @@ visual: window
 
 ## 环境变量
 
-- `NEXT_PUBLIC_SITE_URL`：生产站点的绝对地址，用于 canonical 和分享元数据。未设置时使用 `http://localhost:3000`。
+- `NEXT_PUBLIC_SITE_URL`：生产站点的绝对地址，用于 canonical 和分享元数据。未设置时使用当前 Sites 生产地址。
 
 ## 部署
 
