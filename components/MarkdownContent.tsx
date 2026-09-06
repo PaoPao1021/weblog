@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { createHeadingIder } from '@/lib/toc';
 
 function renderInline(value: string): ReactNode[] {
   const parts = value.split(/(`[^`]+`|\[[^\]]+\]\([^)]+\))/g);
@@ -13,6 +14,7 @@ function renderInline(value: string): ReactNode[] {
 export function MarkdownContent({ source }: { source: string }) {
   const lines = source.replaceAll('\r\n', '\n').split('\n');
   const blocks: ReactNode[] = [];
+  const headingId = createHeadingIder();
 
   for (let index = 0; index < lines.length;) {
     const line = lines[index].trimEnd();
@@ -35,7 +37,9 @@ export function MarkdownContent({ source }: { source: string }) {
     if (heading) {
       const content = renderInline(heading[2]);
       const key = blocks.length;
-      blocks.push(heading[1].length === 2 ? <h2 key={key}>{content}</h2> : <h3 key={key}>{content}</h3>);
+      if (heading[1].length === 2) blocks.push(<h2 key={key} id={headingId(heading[2])}>{content}</h2>);
+      else if (heading[1].length === 3) blocks.push(<h3 key={key} id={headingId(heading[2])}>{content}</h3>);
+      else blocks.push(<h4 key={key}>{content}</h4>);
       index += 1;
       continue;
     }

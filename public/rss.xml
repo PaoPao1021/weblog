@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>浮光笔记 · Afterglow Notes</title>
+    <link>https://afterglow-notes.myteam-5878.chatgpt.site</link>
+    <atom:link href="https://afterglow-notes.myteam-5878.chatgpt.site/rss.xml" rel="self" type="application/rss+xml"/>
+    <description>我的个人记录平台：写下日常的片段、忽然的想法，以及那些让普通日子微微发亮的瞬间。</description>
+    <language>zh-CN</language>
+    <generator>afterglow-notes</generator>
+    <item>
+      <title>How I built this little digital garden</title>
+      <link>https://afterglow-notes.myteam-5878.chatgpt.site/en/posts/build-my-digital-garden</link>
+      <guid isPermaLink="true">https://afterglow-notes.myteam-5878.chatgpt.site/en/posts/build-my-digital-garden</guid>
+      <pubDate>Tue, 18 Aug 2026 01:00:00 GMT</pubDate>
+      <description>A field note on content structure, bilingual routes, and the visual details that turned an idea into a real place on the web.</description>
+      <language>en</language>
+    </item>
+    <item>
+      <title>我如何搭建这座小小的数字花园</title>
+      <link>https://afterglow-notes.myteam-5878.chatgpt.site/zh/posts/build-my-digital-garden</link>
+      <guid isPermaLink="true">https://afterglow-notes.myteam-5878.chatgpt.site/zh/posts/build-my-digital-garden</guid>
+      <pubDate>Tue, 18 Aug 2026 01:00:00 GMT</pubDate>
+      <description>从内容结构、双语路由到视觉细节，记录个人博客从想法变成可访问页面的过程。</description>
+      <language>zh-CN</language>
+    </item>
+    <item>
+      <title>Turning complex learning into reusable paths</title>
+      <link>https://afterglow-notes.myteam-5878.chatgpt.site/en/posts/reusable-learning-paths</link>
+      <guid isPermaLink="true">https://afterglow-notes.myteam-5878.chatgpt.site/en/posts/reusable-learning-paths</guid>
+      <pubDate>Wed, 12 Aug 2026 01:00:00 GMT</pubDate>
+      <description>Useful notes preserve decisions, failed attempts, and a clear doorway back into the problem—not only the final answer.</description>
+      <language>en</language>
+    </item>
+    <item>
+      <title>把复杂的学习，整理成可以复用的路径</title>
+      <link>https://afterglow-notes.myteam-5878.chatgpt.site/zh/posts/reusable-learning-paths</link>
+      <guid isPermaLink="true">https://afterglow-notes.myteam-5878.chatgpt.site/zh/posts/reusable-learning-paths</guid>
+      <pubDate>Wed, 12 Aug 2026 01:00:00 GMT</pubDate>
+      <description>笔记不只是保存结论，也应该记录判断、试错与重新进入问题的入口。</description>
+      <language>zh-CN</language>
+    </item>
+    <item>
+      <title>July collection: things worth a longer look</title>
+      <link>https://afterglow-notes.myteam-5878.chatgpt.site/en/posts/july-collection</link>
+      <guid isPermaLink="true">https://afterglow-notes.myteam-5878.chatgpt.site/en/posts/july-collection</guid>
+      <pubDate>Thu, 30 Jul 2026 01:00:00 GMT</pubDate>
+      <description>Books, websites, sounds, and small moments I loved lately—a monthly slice saved for my future self.</description>
+      <language>en</language>
+    </item>
+    <item>
+      <title>七月收藏夹：让我停下来多看一会儿的事物</title>
+      <link>https://afterglow-notes.myteam-5878.chatgpt.site/zh/posts/july-collection</link>
+      <guid isPermaLink="true">https://afterglow-notes.myteam-5878.chatgpt.site/zh/posts/july-collection</guid>
+      <pubDate>Thu, 30 Jul 2026 01:00:00 GMT</pubDate>
+      <description>一组近期喜欢的书、网站、声音和生活片段，也是一份写给未来自己的月度切片。</description>
+      <language>zh-CN</language>
+    </item>
+    <item>
+      <title>A note to my first-time indie-builder self</title>
+      <link>https://afterglow-notes.myteam-5878.chatgpt.site/en/posts/first-indie-project</link>
+      <guid isPermaLink="true">https://afterglow-notes.myteam-5878.chatgpt.site/en/posts/first-indie-project</guid>
+      <pubDate>Tue, 21 Jul 2026 01:00:00 GMT</pubDate>
+      <description>Do not force every feature into version one. Start with one complete loop people can see and use.</description>
+      <language>en</language>
+    </item>
+    <item>
+      <title>写给第一次独立做项目的自己</title>
+      <link>https://afterglow-notes.myteam-5878.chatgpt.site/zh/posts/first-indie-project</link>
+      <guid isPermaLink="true">https://afterglow-notes.myteam-5878.chatgpt.site/zh/posts/first-indie-project</guid>
+      <pubDate>Tue, 21 Jul 2026 01:00:00 GMT</pubDate>
+      <description>别急着把所有功能塞进第一版，先做出一个能被看见、能被使用的完整小闭环。</description>
+      <language>zh-CN</language>
+    </item>
+  </channel>
+</rss>

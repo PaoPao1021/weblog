@@ -3,7 +3,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MarkdownContent } from '@/components/MarkdownContent';
 import { PageShellClient } from '@/components/PageShellClient';
+import { ReadingProgress } from '@/components/ReadingProgress';
+import { TocNav } from '@/components/TocNav';
 import { categoryLabels, isLanguage, languages } from '@/lib/i18n';
+import { extractToc } from '@/lib/toc';
 import { formatPostDate, getPost, getPosts, toSearchItems } from '@/lib/content';
 
 type Props = { params: Promise<{ lang: string; slug: string }> };
@@ -39,8 +42,9 @@ export default async function PostPage({ params }: Props) {
   const other = lang === 'zh' ? 'en' : 'zh';
 
   return <PageShellClient language={lang} current="posts" languageHref={getPost(other, slug) ? `/${other}/posts/${slug}` : `/${other}/posts`} searchItems={toSearchItems(posts)}>
+    <ReadingProgress />
     <article className="post-page section-frame">
-      <nav className="breadcrumbs" aria-label="Breadcrumb"><Link href={`/${lang}`}>{lang === 'zh' ? '首页' : 'Home'}</Link><span>/</span><Link href={`/${lang}/posts`}>{lang === 'zh' ? '文章' : 'Writing'}</Link><span>/</span><span aria-current="page">{post.title}</span></nav>
+      <nav className="breadcrumbs" aria-label="Breadcrumb"><Link href={`/${lang}`}>{lang === 'zh' ? '首页' : 'Home'}</Link><span>/</span><Link href={`/${lang}/posts`}>{lang === 'zh' ? '记录' : 'Records'}</Link><span>/</span><span aria-current="page">{post.title}</span></nav>
       <header className="post-header">
         <Link className="post-category" href={`/${lang}/categories/${post.category}`}>{categoryLabels[post.category][lang]}</Link>
         <h1>{post.title}</h1>
@@ -49,9 +53,12 @@ export default async function PostPage({ params }: Props) {
       </header>
       <div className="post-layout">
         <div className="prose"><MarkdownContent source={post.body} /></div>
-        <aside className="post-aside"><span>{lang === 'zh' ? '标签' : 'TAGS'}</span><div>{post.tags.map((tag) => <Link key={tag} href={`/${lang}/tags/${tag}`}>#{tag}</Link>)}</div></aside>
+        <aside className="post-aside">
+          <TocNav items={extractToc(post.body)} label={lang === 'zh' ? '本页目录' : 'ON THIS PAGE'} />
+          <div className="aside-tags"><span>{lang === 'zh' ? '标签' : 'TAGS'}</span><div>{post.tags.map((tag) => <Link key={tag} href={`/${lang}/tags/${tag}`}>#{tag}</Link>)}</div></div>
+        </aside>
       </div>
-      <nav className="post-pagination" aria-label={lang === 'zh' ? '相邻文章' : 'Adjacent stories'}>
+      <nav className="post-pagination" aria-label={lang === 'zh' ? '相邻记录' : 'Adjacent entries'}>
         {older ? <Link href={`/${lang}/posts/${older.slug}`}><span>← {lang === 'zh' ? '上一篇' : 'Older'}</span><strong>{older.title}</strong></Link> : <span />}
         {newer ? <Link className="next" href={`/${lang}/posts/${newer.slug}`}><span>{lang === 'zh' ? '下一篇' : 'Newer'} →</span><strong>{newer.title}</strong></Link> : <span />}
       </nav>

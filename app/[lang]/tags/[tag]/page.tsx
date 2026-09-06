@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isLanguage(lang) || !getTags(lang).some((item) => item.tag === tag)) return {};
   return {
     title: `#${tag} | ${lang === 'zh' ? '浮光笔记' : 'Afterglow Notes'}`,
-    description: lang === 'zh' ? `带有 #${tag} 标签的全部文章。` : `Every story tagged #${tag}.`,
+    description: lang === 'zh' ? `带有 #${tag} 标签的全部记录。` : `Every entry tagged #${tag}.`,
     alternates: { canonical: `/${lang}/tags/${tag}` },
   };
 }
@@ -28,5 +28,5 @@ export default async function TagPage({ params }: Props) {
   const posts = getPosts(lang).filter((post) => post.tags.includes(tag));
   const other = lang === 'zh' ? 'en' : 'zh';
   const languageHref = getTags(other).some((item) => item.tag === tag) ? `/${other}/tags/${tag}` : `/${other}/posts`;
-  return <PageShellClient language={lang} current="posts" languageHref={languageHref} searchItems={toSearchItems(getPosts(lang))}><ContentIntro language={lang} kicker={lang === 'zh' ? '标签' : 'TAG'} title={`#${tag}`} description={lang === 'zh' ? `带有 #${tag} 标签的全部文章。` : `Every story tagged #${tag}.`} /><section className="collection-section section-frame"><PostCollection posts={posts} language={lang} /></section></PageShellClient>;
+  return <PageShellClient language={lang} current="posts" languageHref={languageHref} searchItems={toSearchItems(getPosts(lang))}><ContentIntro language={lang} title={`#${tag}`} description={lang === 'zh' ? `带有 #${tag} 标签的全部记录。` : `Every entry tagged #${tag}.`} /><section className="collection-section section-frame"><PostCollection posts={posts} language={lang} /></section></PageShellClient>;
 }

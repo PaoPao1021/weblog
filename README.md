@@ -1,6 +1,6 @@
 # 浮光笔记 · Afterglow Notes
 
-一个面向技术实践、学习方法与生活记录的双语个人数字花园。站点使用中文与英文独立路由，内容由构建时校验的 Markdown/MDX 文件驱动，并面向 OpenAI Sites / Cloudflare Workers 运行环境构建。
+我的个人记录平台：写下日常的片段、忽然的想法，以及那些让普通日子微微发亮的瞬间。站点使用中文与英文独立路由，内容由构建时校验的 Markdown/MDX 文件驱动，并面向 OpenAI Sites / Cloudflare Workers 运行环境构建。
 
 ## 功能
 

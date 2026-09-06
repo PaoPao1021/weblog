@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = categoryLabels[id][lang];
   return {
     title: `${title} | ${lang === 'zh' ? '浮光笔记' : 'Afterglow Notes'}`,
-    description: lang === 'zh' ? `收录在“${title}”分类下的全部文章。` : `Every story filed under “${title}”.`,
+    description: lang === 'zh' ? `收录在“${title}”主题下的全部记录。` : `Every story filed under “${title}”.`,
     alternates: { canonical: `/${lang}/categories/${id}`, languages: { 'zh-CN': `/zh/categories/${id}`, en: `/en/categories/${id}` } },
   };
 }
@@ -31,5 +31,5 @@ export default async function CategoryPage({ params }: Props) {
   const id = category as Exclude<CategoryId, 'all'>;
   const title = categoryLabels[id][lang];
   const posts = getPosts(lang).filter((post) => post.category === id);
-  return <PageShellClient language={lang} current="posts" languageHref={`/${lang === 'zh' ? 'en' : 'zh'}/categories/${id}`} searchItems={toSearchItems(getPosts(lang))}><ContentIntro language={lang} kicker={lang === 'zh' ? '分类' : 'CATEGORY'} title={title} description={lang === 'zh' ? `收录在“${title}”分类下的全部文章。` : `Every story filed under “${title}”.`} /><section className="collection-section section-frame"><PostCollection posts={posts} language={lang} /></section></PageShellClient>;
+  return <PageShellClient language={lang} current="posts" languageHref={`/${lang === 'zh' ? 'en' : 'zh'}/categories/${id}`} searchItems={toSearchItems(getPosts(lang))}><ContentIntro language={lang} title={title} description={lang === 'zh' ? `收录在“${title}”主题下的全部记录。` : `Every story filed under “${title}”.`} /><section className="collection-section section-frame"><PostCollection posts={posts} language={lang} /></section></PageShellClient>;
 }
