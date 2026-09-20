@@ -10,6 +10,46 @@ export interface CommandResult {
   action?: TerminalAction;
 }
 
+const quotes = [
+  '“Simplicity is prerequisite for reliability.” — Edsger W. Dijkstra',
+  '“The best way to predict the future is to invent it.” — Alan Kay',
+  '“Good design is as little design as possible.” — Dieter Rams',
+  '“Make it work, make it right, make it fast.” — Kent Beck',
+  '“Stay hungry, stay foolish.” — Steve Jobs',
+  '“Programs must be written for people to read, and only incidentally for machines to execute.” — Harold Abelson',
+  '“Talk is cheap. Show me the code.” — Linus Torvalds',
+];
+
+function getWeather(city?: string): string[] {
+  const target = city ? city.toUpperCase() : 'CYBERSPACE';
+  return [
+    `  Weather Forecast for [${target}]:`,
+    '  ┌──────────────┬───────────────────────────────┐',
+    '  │    \\  /      │ Condition: Clear & Serene     │',
+    '  │  _ /"".\\ _   │ Temperature: 22°C (71.6°F)    │',
+    '  │    \\__/      │ Humidity: 45%  Wind: 3 km/h   │',
+    '  │   /  \\       │ Air Index: Crystal Clear (AQI 12)│',
+    '  └──────────────┴───────────────────────────────┘',
+    '  A beautiful day to craft thoughtful software.',
+  ];
+}
+
+function cowsay(text: string): string[] {
+  const clean = text.trim() || 'Moo! Welcome to WeblogOS!';
+  const len = Math.max(clean.length, 10);
+  const border = '─'.repeat(len + 2);
+  return [
+    ` ┌${border}┐`,
+    ` │ ${clean.padEnd(len, ' ')} │`,
+    ` └${border}┘`,
+    '        \\   ^__^',
+    '         \\  (oo)\\_______',
+    '            (__)\\       )\\/\\',
+    '                ||----w |',
+    '                ||     ||',
+  ];
+}
+
 const helpLines = [
   'Available commands:',
   '  help              show this list',
@@ -22,6 +62,9 @@ const helpLines = [
   '  theme [mode]      light, dark, or system',
   '  date              show the current date',
   '  neofetch          display system telemetry',
+  '  weather [city]    display weather report',
+  '  fortune / quote   words of wisdom',
+  '  cowsay [message]  cow speaking ascii',
   '  contact           find a way to get in touch',
   '  clear             clear the screen',
   '  sudo hire-me      make an excellent decision',
@@ -47,6 +90,18 @@ export function parseCommand(input: string, theme?: ThemeMode): CommandResult {
         '  ╰────────────────────────────────────╯',
       ],
     };
+  }
+  if (command === 'weather' || command.startsWith('weather ')) {
+    const city = command.startsWith('weather ') ? input.trim().slice(8).trim() : undefined;
+    return { lines: getWeather(city) };
+  }
+  if (command === 'quote' || command === 'fortune') {
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+    return { lines: [quote] };
+  }
+  if (command === 'cowsay' || command.startsWith('cowsay ')) {
+    const msg = command.startsWith('cowsay ') ? input.trim().slice(7).trim() : 'Moo! Welcome to WeblogOS!';
+    return { lines: cowsay(msg) };
   }
   if (command === 'ls') return { lines: ['about.txt  README.md  projects/'] };
   if (command === 'ls projects') return { lines: projects.map((project) => `${project.title} [${project.status}]`) };

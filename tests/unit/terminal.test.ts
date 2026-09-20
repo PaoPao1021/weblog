@@ -20,4 +20,17 @@ describe('parseCommand', () => {
     expect(parseCommand('sudo hire-me').lines?.slice(0, 2)).toEqual(['Permission granted.', 'Opening contact...']);
     expect(parseCommand('wat').lines).toEqual(['command not found: wat', 'Type help for available commands.']);
   });
+
+  it('supports interactive weather, quotes, and cowsay commands', () => {
+    const weather = parseCommand('weather Tokyo');
+    expect(weather.lines?.[0]).toContain('TOKYO');
+    expect(weather.lines?.some((l) => l.includes('Condition: Clear & Serene'))).toBe(true);
+
+    const quote = parseCommand('quote');
+    expect(quote.lines?.[0]).toBeDefined();
+
+    const cow = parseCommand('cowsay Hello Weblog');
+    expect(cow.lines?.some((l) => l.includes('Hello Weblog'))).toBe(true);
+    expect(cow.lines?.some((l) => l.includes('^__^'))).toBe(true);
+  });
 });

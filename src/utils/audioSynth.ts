@@ -1,7 +1,7 @@
 // Lightweight Web Audio API synthesizer for ambient background soundscapes and micro-sound effects.
 // 100% self-contained, zero external asset dependencies, zero network requests.
 
-type SoundType = 'rain' | 'whitenoise' | 'cosmic';
+export type SoundType = 'rain' | 'whitenoise' | 'cosmic';
 
 class AudioSynthesizer {
   private ctx: AudioContext | null = null;
@@ -10,6 +10,8 @@ class AudioSynthesizer {
   private activeType: SoundType | null = null;
   private isPlaying = false;
   private timer: number | null = null;
+  private currentVolume = 0.35;
+  private soundFxEnabled: boolean = typeof window !== 'undefined' ? localStorage.getItem('personal-os-sound-fx') !== 'false' : true;
 
   private initContext(): AudioContext {
     if (!this.ctx) {
@@ -22,8 +24,25 @@ class AudioSynthesizer {
     return this.ctx;
   }
 
+  public isSoundFxEnabled(): boolean {
+    return this.soundFxEnabled;
+  }
+
+  public setSoundFxEnabled(enabled: boolean): void {
+    this.soundFxEnabled = enabled;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('personal-os-sound-fx', String(enabled));
+      window.dispatchEvent(new CustomEvent('personal-os-sound-fx-change', { detail: { enabled } }));
+    }
+  }
+
+  public getVolume(): number {
+    return this.currentVolume;
+  }
+
   public playAmbient(type: SoundType, volume = 0.3): void {
     try {
+      this.currentVolume = volume;
       const ctx = this.initContext();
       this.stopAmbient();
 
@@ -42,6 +61,9 @@ class AudioSynthesizer {
 
       this.activeType = type;
       this.isPlaying = true;
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('personal-os-ambient-change', { detail: { isPlaying: true, type, volume } }));
+      }
     } catch {
       // Gracefully handle environments without Web Audio support
       this.isPlaying = false;
@@ -74,15 +96,23 @@ class AudioSynthesizer {
     }
     this.isPlaying = false;
     this.activeType = null;
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('personal-os-ambient-change', { detail: { isPlaying: false, type: null, volume: this.currentVolume } }));
+    }
   }
 
   public setVolume(volume: number): void {
+    this.currentVolume = Math.max(0, Math.min(volume, 1));
     if (this.gainNode && this.ctx) {
-      this.gainNode.gain.setValueAtTime(Math.max(0, Math.min(volume, 1)), this.ctx.currentTime);
+      this.gainNode.gain.setValueAtTime(this.currentVolume, this.ctx.currentTime);
+    }
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('personal-os-ambient-change', { detail: { isPlaying: this.isPlaying, type: this.activeType, volume: this.currentVolume } }));
     }
   }
 
   public playChime(): void {
+    if (!this.soundFxEnabled) return;
     try {
       const ctx = this.initContext();
       const now = ctx.currentTime;
@@ -112,6 +142,7 @@ class AudioSynthesizer {
   }
 
   public playTick(): void {
+    if (!this.soundFxEnabled) return;
     try {
       const ctx = this.initContext();
       const now = ctx.currentTime;

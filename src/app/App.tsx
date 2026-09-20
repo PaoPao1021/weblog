@@ -1,7 +1,7 @@
 import { useLocale } from '../i18n/context';
 import { lazy, Suspense, useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import { Command, Monitor, Moon, Search, Sparkles, Sun } from 'lucide-react';
+import { Command, Monitor, Moon, Search, SlidersHorizontal, Sparkles, Sun } from 'lucide-react';
 import Background from '../components/desktop/Background';
 import Hero from '../components/desktop/Hero';
 import DesktopWidget from '../components/desktop/DesktopWidget';
@@ -25,14 +25,17 @@ const Notes = lazy(() => import('../components/windows/notes/Notes'));
 const About = lazy(() => import('../components/windows/about/About'));
 const Terminal = lazy(() => import('../components/terminal/Terminal'));
 const CommandPalette = lazy(() => import('../components/command/CommandPalette'));
+const ControlCenter = lazy(() => import('../components/desktop/ControlCenter'));
 
 export default function App() {
   const { t, locale, setLocale } = useLocale();
   const [state, reduce] = useReducer(desktopReducer, initialDesktop);
   const [palette, setPalette] = useState(false);
   const [keyboardHelp, setKeyboardHelp] = useState(false);
+  const [controlCenter, setControlCenter] = useState(false);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const paletteTrigger = useRef<HTMLElement | null>(null);
+  const controlCenterTrigger = useRef<HTMLElement | null>(null);
   const openPalette = useCallback(() => {
     paletteTrigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     setPalette(true);
@@ -99,18 +102,20 @@ export default function App() {
         setKeyboardHelp(true);
       }
       if (event.key === 'Escape') {
-        if (keyboardHelp) setKeyboardHelp(false);
+        if (controlCenter) setControlCenter(false);
+        else if (keyboardHelp) setKeyboardHelp(false);
         else if (!palette && stateRef.current.active) dispatch({ type: 'close', app: stateRef.current.active });
       }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [dispatch, palette, keyboardHelp, openPalette]);
+  }, [dispatch, palette, keyboardHelp, controlCenter, openPalette]);
 
   useEffect(() => {
-    if (desktopRef.current) desktopRef.current.inert = palette || keyboardHelp || (compact && state.active !== null);
-    if (dockRef.current) dockRef.current.inert = palette || keyboardHelp;
-  }, [palette, keyboardHelp, compact, state.active]);
+    if (desktopRef.current)
+      desktopRef.current.inert = palette || keyboardHelp || controlCenter || (compact && state.active !== null);
+    if (dockRef.current) dockRef.current.inert = palette || keyboardHelp || controlCenter;
+  }, [palette, keyboardHelp, controlCenter, compact, state.active]);
 
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -164,6 +169,18 @@ export default function App() {
                 <ThemeIcon size={17} strokeWidth={1.6} />
                 <span className="theme-toggle-label">{t(theme)}</span>
               </button>
+              <button
+                className="control-center-toggle theme-toggle"
+                onClick={(e) => {
+                  controlCenterTrigger.current = e.currentTarget;
+                  setControlCenter((prev) => !prev);
+                }}
+                aria-label={t('Control Center')}
+                title={t('Control Center')}
+                aria-expanded={controlCenter}
+              >
+                <SlidersHorizontal size={16} strokeWidth={1.6} />
+              </button>
               <span className="header-note">{t('A place for things that matter.')}</span>
               <button className="search-trigger" onClick={openPalette} aria-label={t('Explore — open command palette')}>
                 <Search size={15} />
@@ -189,7 +206,7 @@ export default function App() {
           </div>
         </div>
         {compact && state.active && <div className="sheet-backdrop" />}
-        <div className="window-layer" inert={palette || keyboardHelp || undefined}>
+        <div className="window-layer" inert={palette || keyboardHelp || controlCenter || undefined}>
           <AnimatePresence>
             {state.windows.map((win, index) => (
               <GlassWindow
@@ -247,12 +264,27 @@ export default function App() {
               setTheme={setTheme}
               openPalette={openPalette}
               openHelp={() => setKeyboardHelp(true)}
+              openControlCenter={() => setControlCenter(true)}
               cycleWallpaper={cycleWallpaper}
             />
           )}
         </AnimatePresence>
         <AnimatePresence>
           {keyboardHelp && <KeyboardHelp onClose={() => setKeyboardHelp(false)} />}
+        </AnimatePresence>
+        <AnimatePresence>
+          {controlCenter && (
+            <Suspense fallback={null}>
+              <ControlCenter
+                theme={theme}
+                setTheme={setTheme}
+                wallpaper={wallpaper}
+                setWallpaper={setWallpaper}
+                returnFocus={controlCenterTrigger.current}
+                onClose={() => setControlCenter(false)}
+              />
+            </Suspense>
+          )}
         </AnimatePresence>
       </div>
     </MotionConfig>

@@ -10,6 +10,7 @@ import {
   User,
   Keyboard,
   Palette,
+  SlidersHorizontal,
 } from 'lucide-react';
 import type { Navigate } from '../../app/types';
 import type { ThemeMode } from '../../config/site';
@@ -24,6 +25,7 @@ interface ContextMenuProps {
   setTheme: (theme: ThemeMode) => void;
   openPalette: () => void;
   openHelp?: () => void;
+  openControlCenter?: () => void;
   cycleWallpaper?: () => void;
 }
 
@@ -36,6 +38,7 @@ export default function ContextMenu({
   setTheme,
   openPalette,
   openHelp,
+  openControlCenter,
   cycleWallpaper,
 }: ContextMenuProps) {
   const { t, locale, setLocale } = useLocale();
@@ -125,6 +128,13 @@ export default function ContextMenu({
           <button className="context-menu-item" role="menuitem" onClick={() => handleAction(cycleWallpaper)}>
             <Palette size={14} />
             <span>{t('Change wallpaper')}</span>
+          </button>
+        )}
+
+        {openControlCenter && (
+          <button className="context-menu-item" role="menuitem" onClick={() => handleAction(openControlCenter)}>
+            <SlidersHorizontal size={14} />
+            <span>{t('Control Center')}</span>
           </button>
         )}
 

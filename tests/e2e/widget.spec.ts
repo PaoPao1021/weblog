@@ -71,3 +71,46 @@ test('system window can change desktop wallpaper theme', async ({ page }) => {
   await sunsetBtn.click();
   await expect(page.locator('html')).toHaveAttribute('data-wallpaper', 'sunset');
 });
+
+test('control center opens, toggles sound FX, and changes wallpaper theme', async ({ page }) => {
+  await page.goto('/');
+
+  // Open Control Center from header
+  const ccBtn = page.locator('.control-center-toggle');
+  await expect(ccBtn).toBeVisible();
+  await ccBtn.click();
+
+  const ccDialog = page.getByRole('dialog', { name: /control center|控制中心/i });
+  await expect(ccDialog).toBeVisible();
+
+  // Test Sound FX card toggle
+  const soundCard = ccDialog.getByRole('button', { name: /sound fx|按键音效/i });
+  await expect(soundCard).toBeVisible();
+  const initialPressed = await soundCard.getAttribute('aria-pressed');
+  await soundCard.click();
+  const nextPressed = await soundCard.getAttribute('aria-pressed');
+  expect(nextPressed).not.toBe(initialPressed);
+
+  // Test Wallpaper change from Control Center
+  const forestWp = ccDialog.getByRole('button', { name: /misty forest|迷雾森林/i });
+  await expect(forestWp).toBeVisible();
+  await forestWp.click();
+  await expect(page.locator('html')).toHaveAttribute('data-wallpaper', 'forest');
+
+  // Escape closes Control Center
+  await page.keyboard.press('Escape');
+  await expect(ccDialog).toHaveCount(0);
+});
+
+test('terminal weather and cowsay commands output interactive ascii art', async ({ page }) => {
+  await page.goto('/#/terminal');
+  const input = page.getByRole('textbox', { name: /terminal command/i });
+
+  await input.fill('weather Kyoto');
+  await input.press('Enter');
+  await expect(page.getByText('Condition: Clear & Serene', { exact: false })).toBeVisible();
+
+  await input.fill('cowsay Hello World');
+  await input.press('Enter');
+  await expect(page.getByText('^__^', { exact: false })).toBeVisible();
+});
