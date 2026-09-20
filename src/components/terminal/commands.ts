@@ -21,6 +21,7 @@ const helpLines = [
   '  github            open the source profile',
   '  theme [mode]      light, dark, or system',
   '  date              show the current date',
+  '  neofetch          display system telemetry',
   '  contact           find a way to get in touch',
   '  clear             clear the screen',
   '  sudo hire-me      make an excellent decision',
@@ -33,6 +34,20 @@ export function parseCommand(input: string, theme?: ThemeMode): CommandResult {
   if (!command) return {};
   if (command === 'help') return { lines: helpLines };
   if (command === 'whoami') return { lines: [`${siteConfig.name} — ${siteConfig.description}`] };
+  if (command === 'neofetch' || command === 'fastfetch') {
+    return {
+      lines: [
+        '  ╭────────────────────────────────────╮',
+        `  │ OS:     WeblogOS (Liquid Glass)    │`,
+        `  │ Host:   ${siteConfig.name}'s Weblog    │`,
+        `  │ Kernel: React 19.0 + Vite 6        │`,
+        `  │ Shell:  weblog-sh 1.0              │`,
+        `  │ Theme:  ${theme ?? 'system'}                     │`,
+        `  │ Engine: Tailwind v4 + Motion       │`,
+        '  ╰────────────────────────────────────╯',
+      ],
+    };
+  }
   if (command === 'ls') return { lines: ['about.txt  README.md  projects/'] };
   if (command === 'ls projects') return { lines: projects.map((project) => `${project.title} [${project.status}]`) };
   if (command === 'cat about.txt') return { lines: [siteConfig.about.whoIAm] };

@@ -272,5 +272,17 @@
   "Quick Scratchpad": "随想速记",
   "chars": "字",
   "Jot down a quick thought, task, or link…": "记下零散的想法、任务或链接…",
-  "Desktop context menu": "桌面快捷菜单"
+  "Desktop context menu": "桌面快捷菜单",
+  "DESKTOP WALLPAPER": "桌面壁纸",
+  "Desktop wallpaper": "桌面壁纸",
+  "Change wallpaper": "切换壁纸风格",
+  "Keyboard shortcuts": "键盘快捷键速查",
+  "Open command palette": "打开命令面板",
+  "Close active window or modal": "关闭当前活动窗口或弹窗",
+  "Navigate between accessible controls": "在可交互控件之间导航焦点",
+  "Move active window (when titlebar focused)": "移动当前窗口（标题栏聚焦时）",
+  "Move window in larger increments": "大跨度快速移动窗口",
+  "Toggle this shortcuts cheat sheet": "打开或关闭快捷键速查卡",
+  "Close": "关闭",
+  "  neofetch          display system telemetry": "  neofetch          显示系统遥测信息"
 }

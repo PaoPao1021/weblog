@@ -45,3 +45,29 @@ test('desktop right click opens context menu and can open command palette', asyn
   await expect(contextMenu).toHaveCount(0);
   await expect(page.getByRole('dialog', { name: 'Command palette' })).toBeVisible();
 });
+
+test('question mark opens keyboard shortcuts cheat sheet', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'Keyboard shortcuts cheat sheet is a keyboard interaction.');
+  await page.goto('/');
+  await page.keyboard.press('Shift+Slash');
+  const modal = page.getByRole('dialog', { name: /keyboard shortcuts|键盘快捷键速查/i });
+  await expect(modal).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(modal).toHaveCount(0);
+});
+
+test('terminal neofetch command outputs telemetry information', async ({ page }) => {
+  await page.goto('/#/terminal');
+  const input = page.getByRole('textbox', { name: /terminal command/i });
+  await input.fill('neofetch');
+  await input.press('Enter');
+  await expect(page.getByText('WeblogOS', { exact: false })).toBeVisible();
+});
+
+test('system window can change desktop wallpaper theme', async ({ page }) => {
+  await page.goto('/#/system');
+  const sunsetBtn = page.getByRole('button', { name: /sunset ember|落日暖霞/i });
+  await expect(sunsetBtn).toBeVisible();
+  await sunsetBtn.click();
+  await expect(page.locator('html')).toHaveAttribute('data-wallpaper', 'sunset');
+});

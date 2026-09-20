@@ -874,3 +874,117 @@
     animation: none !important;
   }
 }
+
+/* Wallpaper Theme Variants */
+[data-wallpaper='sunset'] .ambient-one { background: radial-gradient(ellipse, #fed7aa, #fecdd3 45%, transparent 72%) !important; }
+[data-wallpaper='sunset'] .ambient-two { background: radial-gradient(ellipse, #ffedd5, #ffe4e6 50%, transparent 72%) !important; }
+[data-wallpaper='sunset'] .ambient-three { background: #fdba74 !important; }
+[data-wallpaper='sunset'][data-theme='dark'] .ambient-one { background: radial-gradient(ellipse, #4c1d24, #2a1215 50%, transparent 72%) !important; opacity: .38 !important; }
+[data-wallpaper='sunset'][data-theme='dark'] .ambient-two { background: #3b1d11 !important; }
+[data-wallpaper='sunset'][data-theme='dark'] .ambient-three { background: #431407 !important; }
+
+[data-wallpaper='forest'] .ambient-one { background: radial-gradient(ellipse, #bbf7d0, #c7d2fe 45%, transparent 72%) !important; }
+[data-wallpaper='forest'] .ambient-two { background: radial-gradient(ellipse, #dcfce7, #e0e7ff 50%, transparent 72%) !important; }
+[data-wallpaper='forest'] .ambient-three { background: #86efac !important; }
+[data-wallpaper='forest'][data-theme='dark'] .ambient-one { background: radial-gradient(ellipse, #143528, #0d221a 50%, transparent 72%) !important; opacity: .38 !important; }
+[data-wallpaper='forest'][data-theme='dark'] .ambient-two { background: #062a1d !important; }
+[data-wallpaper='forest'][data-theme='dark'] .ambient-three { background: #132e27 !important; }
+
+[data-wallpaper='void'] .ambient-one { background: radial-gradient(ellipse, #e2e8f0, #cbd5e1 45%, transparent 72%) !important; }
+[data-wallpaper='void'] .ambient-two { background: radial-gradient(ellipse, #f1f5f9, #e2e8f0 50%, transparent 72%) !important; }
+[data-wallpaper='void'] .ambient-three { background: #94a3b8 !important; }
+[data-wallpaper='void'][data-theme='dark'] .ambient-one { background: radial-gradient(ellipse, #1e1b4b, #0f172a 50%, transparent 72%) !important; opacity: .38 !important; }
+[data-wallpaper='void'][data-theme='dark'] .ambient-two { background: #09090b !important; }
+[data-wallpaper='void'][data-theme='dark'] .ambient-three { background: #18181b !important; }
+
+/* Keyboard Help Modal */
+.keyboard-help-panel {
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  border-radius: 20px;
+  background: var(--glass-reading);
+  -webkit-backdrop-filter: blur(28px) saturate(1.8);
+  backdrop-filter: blur(28px) saturate(1.8);
+  border: 1px solid var(--border);
+  box-shadow: var(--glass-depth), var(--shadow);
+  overflow: hidden;
+}
+
+.keyboard-help-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--glass-chrome);
+  border-bottom: 1px solid var(--border);
+}
+
+.keyboard-help-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.keyboard-help-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.keyboard-help-close:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.keyboard-help-content {
+  padding: 14px 18px 18px;
+}
+
+.shortcuts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.shortcut-desc {
+  color: var(--text);
+}
+
+.shortcut-keys {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.shortcut-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: 5px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+}

@@ -6,12 +6,14 @@ import Background from '../components/desktop/Background';
 import Hero from '../components/desktop/Hero';
 import DesktopWidget from '../components/desktop/DesktopWidget';
 import ContextMenu from '../components/desktop/ContextMenu';
+import KeyboardHelp from '../components/desktop/KeyboardHelp';
 import GlassWindow from '../components/desktop/GlassWindow';
 import Dock from '../components/dock/Dock';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
 import System from '../components/windows/system/System';
 import { useTheme } from '../hooks/useTheme';
 import { useCompact } from '../hooks/useCompact';
+import { useWallpaper, type WallpaperTheme } from '../hooks/useWallpaper';
 import { desktopReducer, initialDesktop, type DesktopAction } from './windowState';
 import { parseRoute, routeHash } from './route';
 import type { AppId, Navigate } from './types';
@@ -28,6 +30,7 @@ export default function App() {
   const { t, locale, setLocale } = useLocale();
   const [state, reduce] = useReducer(desktopReducer, initialDesktop);
   const [palette, setPalette] = useState(false);
+  const [keyboardHelp, setKeyboardHelp] = useState(false);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const paletteTrigger = useRef<HTMLElement | null>(null);
   const openPalette = useCallback(() => {
@@ -35,6 +38,7 @@ export default function App() {
     setPalette(true);
   }, []);
   const { theme, setTheme } = useTheme();
+  const { wallpaper, setWallpaper } = useWallpaper();
   const ThemeIcon = theme === 'system' ? Monitor : theme === 'dark' ? Moon : Sun;
   const nextTheme = theme === 'system' ? 'light' : theme === 'light' ? 'dark' : 'system';
   const compact = useCompact();
@@ -43,6 +47,13 @@ export default function App() {
   const triggers = useRef(new Map<AppId, HTMLElement>());
   const desktopRef = useRef<HTMLDivElement>(null);
   const dockRef = useRef<HTMLDivElement>(null);
+
+  const cycleWallpaper = useCallback(() => {
+    const themes: WallpaperTheme[] = ['aurora', 'sunset', 'forest', 'void'];
+    const nextIdx = (themes.indexOf(wallpaper) + 1) % themes.length;
+    setWallpaper(themes[nextIdx]);
+  }, [wallpaper, setWallpaper]);
+
   const navigate: Navigate = useCallback((app, item) => {
     if (app && document.activeElement instanceof HTMLElement && !document.activeElement.closest('[role="dialog"]'))
       triggers.current.set(app, document.activeElement);
@@ -50,6 +61,7 @@ export default function App() {
     if (location.hash !== next) history.pushState(null, '', next);
     reduce(app ? { type: 'open', app, item } : { type: 'home' });
   }, []);
+
   useEffect(() => {
     const sync = () => {
       const route = parseRoute(location.hash);
@@ -63,6 +75,7 @@ export default function App() {
       window.removeEventListener('popstate', sync);
     };
   }, []);
+
   const dispatch = useCallback((action: DesktopAction) => {
     const next = desktopReducer(stateRef.current, action);
     reduce(action);
@@ -72,6 +85,7 @@ export default function App() {
       if (!next.active && action.type !== 'focus') requestAnimationFrame(() => triggers.current.get(action.app)?.focus());
     }
   }, []);
+
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
       if (event.isComposing) return;
@@ -80,15 +94,23 @@ export default function App() {
         if (palette) setPalette(false);
         else openPalette();
       }
-      if (event.key === 'Escape' && !palette && stateRef.current.active) dispatch({ type: 'close', app: stateRef.current.active });
+      if (event.key === '?' && !palette && !keyboardHelp && !document.activeElement?.closest('input, textarea')) {
+        event.preventDefault();
+        setKeyboardHelp(true);
+      }
+      if (event.key === 'Escape') {
+        if (keyboardHelp) setKeyboardHelp(false);
+        else if (!palette && stateRef.current.active) dispatch({ type: 'close', app: stateRef.current.active });
+      }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [dispatch, palette, openPalette]);
+  }, [dispatch, palette, keyboardHelp, openPalette]);
+
   useEffect(() => {
-    if (desktopRef.current) desktopRef.current.inert = palette || (compact && state.active !== null);
-    if (dockRef.current) dockRef.current.inert = palette;
-  }, [palette, compact, state.active]);
+    if (desktopRef.current) desktopRef.current.inert = palette || keyboardHelp || (compact && state.active !== null);
+    if (dockRef.current) dockRef.current.inert = palette || keyboardHelp;
+  }, [palette, keyboardHelp, compact, state.active]);
 
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -167,7 +189,7 @@ export default function App() {
           </div>
         </div>
         {compact && state.active && <div className="sheet-backdrop" />}
-        <div className="window-layer" inert={palette || undefined}>
+        <div className="window-layer" inert={palette || keyboardHelp || undefined}>
           <AnimatePresence>
             {state.windows.map((win, index) => (
               <GlassWindow
@@ -224,8 +246,13 @@ export default function App() {
               theme={theme}
               setTheme={setTheme}
               openPalette={openPalette}
+              openHelp={() => setKeyboardHelp(true)}
+              cycleWallpaper={cycleWallpaper}
             />
           )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {keyboardHelp && <KeyboardHelp onClose={() => setKeyboardHelp(false)} />}
         </AnimatePresence>
       </div>
     </MotionConfig>

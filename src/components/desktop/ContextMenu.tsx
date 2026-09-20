@@ -8,6 +8,8 @@ import {
   Headphones,
   Languages,
   User,
+  Keyboard,
+  Palette,
 } from 'lucide-react';
 import type { Navigate } from '../../app/types';
 import type { ThemeMode } from '../../config/site';
@@ -21,6 +23,8 @@ interface ContextMenuProps {
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
   openPalette: () => void;
+  openHelp?: () => void;
+  cycleWallpaper?: () => void;
 }
 
 export default function ContextMenu({
@@ -31,14 +35,16 @@ export default function ContextMenu({
   theme,
   setTheme,
   openPalette,
+  openHelp,
+  cycleWallpaper,
 }: ContextMenuProps) {
   const { t, locale, setLocale } = useLocale();
   const reducedMotion = useReducedMotion();
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Auto-clamp to screen bounds
-  const clampedX = Math.min(Math.max(10, x), window.innerWidth - 220);
-  const clampedY = Math.min(Math.max(10, y), window.innerHeight - 260);
+  const clampedX = Math.min(Math.max(10, x), window.innerWidth - 225);
+  const clampedY = Math.min(Math.max(10, y), window.innerHeight - 340);
 
   useEffect(() => {
     const handlePointerDown = (e: PointerEvent) => {
@@ -85,11 +91,7 @@ export default function ContextMenu({
       transition={{ duration: 0.14, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="menu-group">
-        <button
-          className="context-menu-item"
-          role="menuitem"
-          onClick={() => handleAction(openPalette)}
-        >
+        <button className="context-menu-item" role="menuitem" onClick={() => handleAction(openPalette)}>
           <Search size={14} />
           <span>{t('Explore')}</span>
           <kbd className="menu-shortcut">⌘K</kbd>
@@ -118,6 +120,13 @@ export default function ContextMenu({
             {t('Theme')}: {t(theme)}
           </span>
         </button>
+
+        {cycleWallpaper && (
+          <button className="context-menu-item" role="menuitem" onClick={() => handleAction(cycleWallpaper)}>
+            <Palette size={14} />
+            <span>{t('Change wallpaper')}</span>
+          </button>
+        )}
 
         <button
           className="context-menu-item"
@@ -150,6 +159,14 @@ export default function ContextMenu({
       <div className="menu-divider" />
 
       <div className="menu-group">
+        {openHelp && (
+          <button className="context-menu-item" role="menuitem" onClick={() => handleAction(openHelp)}>
+            <Keyboard size={14} />
+            <span>{t('Keyboard shortcuts')}</span>
+            <kbd className="menu-shortcut">?</kbd>
+          </button>
+        )}
+
         <button
           className="context-menu-item"
           role="menuitem"

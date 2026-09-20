@@ -64,7 +64,7 @@ export default function Terminal({ theme, setTheme }: TerminalProps) {
   const availableCommands = [
     'help', 'whoami', 'ls', 'ls projects', 'cat about.txt', 'cat README.md',
     'github', 'theme', 'theme light', 'theme dark', 'theme system',
-    'date', 'contact', 'clear', 'sudo hire-me',
+    'date', 'neofetch', 'contact', 'clear', 'sudo hire-me',
   ];
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
