@@ -1,67 +1,109 @@
-# 浮光笔记 · Afterglow Notes
+# Personal OS Portfolio
 
-我的个人记录平台：写下日常的片段、忽然的想法，以及那些让普通日子微微发亮的瞬间。站点使用中文与英文独立路由，内容由构建时校验的 Markdown/MDX 文件驱动，并面向 OpenAI Sites / Cloudflare Workers 运行环境构建。
+A personal homepage shaped like a small desktop environment: selected work, a digital garden, a compact profile, command palette, and a simulated terminal. It is a static React application built to publish on GitHub Pages without a backend.
 
-## 功能
+> Screenshot placeholder: add a desktop overview image here after making the site your own.
 
-- 中文 `/zh` 与英文 `/en` 独立网址
-- 首页、文章列表、文章详情、归档、分类、标签、随笔和关于页
-- 深浅主题、移动端导航和 `Ctrl/⌘ + K` 全文搜索
-- Zod 校验文章头部数据，自动发现新增 `.md` / `.mdx` 内容
-- 草稿隔离、翻译配对、阅读时长、上一篇/下一篇
-- 页面级 canonical、hreflang、Open Graph 与 X 元数据
-- Cloudflare Worker 兼容的无动态代码执行 Markdown 渲染
+## Features
 
-## 本地开发
+- Glass-inspired desktop surface with light, dark, and system themes
+- Draggable desktop windows and a compact sheet experience on smaller screens
+- Projects with detail views and local SVG cover art
+- Markdown-powered notes with tag filtering, related notes, GFM tables, and code-copy controls
+- Keyboard command palette and a safe simulated terminal
+- Hash-based deep links that work on GitHub Pages project sites
+- Local-first personal content and no runtime API calls
 
-需要 Node.js 22.13 或更高版本。
+## Stack
+
+- React 19 + TypeScript + Vite
+- Tailwind CSS and CSS design tokens
+- Framer Motion
+- Lucide icons
+- react-markdown + remark-gfm
+
+## Getting started
+
+Use Node.js 22 or newer.
 
 ```bash
-npm ci
+npm install
 npm run dev
 ```
 
-打开 `http://localhost:3000`。提交前运行：
+Useful checks:
 
 ```bash
+npm run typecheck
 npm run lint
+npm run test
 npm run build
-npm audit --omit=dev
+npm run preview
 ```
 
-## 添加文章
+`npm run build` also generates the static SEO files. End-to-end tests exist as a local command (`npm run test:e2e`) but are intentionally not part of the initial Pages deployment workflow.
 
-在 `content/posts/<translation-key>/` 中添加 `zh.md` 或 `en.md`。文件需包含以下头部数据：
+## Configuration
 
-```yaml
----
-schemaVersion: 1
-translationKey: example-post
-locale: zh-CN
-slug: example-post
-status: published
-title: 示例文章
-description: 一句话摘要
-publishedAt: '2026-08-26T09:00:00+08:00'
-updatedAt: '2026-08-26T09:00:00+08:00'
-category: building
-tags: [frontend, writing]
-featured: false
-accent: violet
-visual: window
----
+Personal metadata lives in [`src/config/site.ts`](src/config/site.ts):
+
+- Replace `name`, `username`, hero text, About copy, and the Currently section.
+- Set `github`, `email`, and `resume` when those destinations are ready. `null` renders an honest “Not configured” state.
+- Set `siteUrl` to the final public URL before publishing so canonical and social metadata can be generated.
+- Update `version` and `lastUpdated` when releasing meaningful changes.
+
+Selected work is stored in [`src/data/projects.ts`](src/data/projects.ts). Each project has a stable `id`, description, stack, status, cover, optional GitHub/demo links, and detail content. Replace the three clearly-labelled placeholder records and their SVG covers in `public/images/projects/` with your own work.
+
+Notes are local Markdown strings in [`src/data/notes.ts`](src/data/notes.ts). Add a unique `id`, ISO date, short description, tags, and Markdown content. Notes use tags for filtering and for choosing related reading.
+
+Theme tokens and content typography are kept in `src/styles/`; adjust these instead of scattering colors through individual components. Assets should go through `assetUrl()` so they work from both a site root and a repository subpath.
+
+## Deployment to GitHub Pages
+
+The included workflow at [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) runs on pushes to `main` and can also be started manually. It uses Node 22, installs from the lockfile, then runs type checking, linting, unit tests, the production build, and the official GitHub Pages deploy actions.
+
+Before the first deployment:
+
+1. Push this project to a GitHub repository and ensure its default branch is `main`.
+2. In **Settings → Pages**, set the source to **GitHub Actions**.
+3. Set `siteUrl` in `src/config/site.ts` to the final URL, such as `https://username.github.io/repository-name/` for a project site or `https://username.github.io/` for a user site.
+4. Push to `main` or run the **Deploy GitHub Pages** workflow manually.
+
+The workflow reads the base path from `actions/configure-pages`, passes it to Vite as `VITE_BASE_PATH`, and sets `SITE_URL` from the same Pages configuration. This covers both root sites and project repositories without hard-coding a repository name.
+
+For a custom domain, configure the domain in GitHub Pages, then set `siteUrl` to the final HTTPS custom-domain URL. Keep the Pages workflow enabled; it will continue to provide the correct asset base path.
+
+## Routes and SEO
+
+The site uses hash routes, for example:
+
+```text
+#/projects/project-one
+#/notes/designing-for-focus
 ```
 
-`status` 可选 `draft`、`review`、`published` 或 `archived`；只有 `published` 会进入页面与搜索索引。分类、标签和双语版本由构建自动发现，无需维护源码清单。
+This keeps deep links refresh-safe on static hosting because the server only needs to return the main `index.html`. It also means individual hash routes are client-side states, not separate crawlable documents. The generated sitemap and social metadata describe the site homepage; they do not claim unique SEO pages for every project or note.
 
-## 环境变量
+If an image or JavaScript file 404s after deployment, verify that it is referenced with `assetUrl()` (or Vite’s base-aware asset handling) rather than a hard-coded root path such as `/images/...`.
 
-- `NEXT_PUBLIC_SITE_URL`：生产站点的绝对地址，用于 canonical 和分享元数据。未设置时使用当前 Sites 生产地址。
+## Project structure
 
-## 部署
+```text
+src/app/                 routes, providers, and desktop state
+src/components/          desktop, windows, dock, command palette, terminal, shared UI
+src/config/site.ts       personal metadata
+src/data/                projects and notes
+src/styles/              theme tokens, layout, and typography
+public/                  local images and other static assets
+scripts/                 build-time SEO generation
+.github/workflows/       GitHub Pages deployment
+```
 
-项目包含 `.openai/hosting.json`，可直接通过 OpenAI Sites 构建和发布。生产部署前请设置 `NEXT_PUBLIC_SITE_URL`。
+## Customization checklist
 
-## License
-
-源码保留所有权利；文章内容未经许可请勿转载。
+- [ ] Replace `Your Name` and all placeholder prose.
+- [ ] Add GitHub, email, resume, and final `siteUrl` values.
+- [ ] Replace project records, covers, screenshots, and optional links.
+- [ ] Add notes that reflect your own interests and work.
+- [ ] Capture and add real screenshots to this README.
+- [ ] Enable GitHub Pages and confirm the deployed subpath in a production browser.
