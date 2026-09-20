@@ -1,3 +1,4 @@
+import { useLocale } from '../../i18n/context';
 import { Check, Copy } from 'lucide-react';
 import { isValidElement, useState } from 'react';
 import type { ReactElement, ReactNode } from 'react';
@@ -9,6 +10,7 @@ interface MarkdownProps {
 }
 
 function CodeBlock({ className, children }: { className?: string; children?: ReactNode }) {
+  const { t } = useLocale();
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
   const code = String(children).replace(/\n$/, '');
   const language = className?.replace('language-', '') || 'text';
@@ -28,9 +30,9 @@ function CodeBlock({ className, children }: { className?: string; children?: Rea
     <div className="prose-codeblock">
       <div className="prose-codebar">
         <span>{language}</span>
-        <button type="button" onClick={copy} aria-label="Copy code">
+        <button type="button" onClick={copy} aria-label={t("Copy code")}>
           {copyState === 'copied' ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
-          {copyState === 'copied' ? 'Copied' : copyState === 'failed' ? 'Could not copy' : 'Copy'}
+          {t(copyState === 'copied' ? 'Copied' : copyState === 'failed' ? 'Could not copy' : 'Copy')}
         </button>
       </div>
       <pre><code className={className}>{children}</code></pre>

@@ -23,3 +23,12 @@ The visual system translates Liquid Glass principles into a lightweight browser 
 The Dock uses one material container and a moving selected lens, rather than a stack of separately blurred icon tiles. Transitions respect reduced motion. Reduced-transparency and increased-contrast preferences use solid surfaces. Compact sheets use an opaque reading area; the bottom navigation remains a separate functional layer.
 
 Cold gray-blue remains the project's chosen palette. Colorful wallpapers, oversized glow and ornamental glass cards from references are intentionally not adopted.
+
+## Visual refinement — September 2026
+
+- Keep the centered introduction, with a clear greeting/title/description hierarchy and balanced title wrapping. Move the work-in-progress signature below the links to let the name lead.
+- Keep glass on navigation and window chrome. Project and note cards use a stable reading surface without their own backdrop blur. Dark edges use restrained highlights instead of bright outlines.
+- The header offers a labelled System → Light → Dark → System theme cycle, alongside search. Both remain 44px touch targets on compact screens.
+- Compact Dock icons and labels form one vertical group inside each button; the active lens supplies selection feedback without a second indicator beneath it.
+- Use one transform owner for primary button feedback; preserve keyboard focus indicators and disable decorative displacement for reduced motion. Content is visible from the first frame.
+- Reading links are underlined, card focus rings remain inside clipped surfaces, and compact filters/close controls have larger hit areas.

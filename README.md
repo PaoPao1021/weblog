@@ -13,6 +13,8 @@ A personal homepage shaped like a small desktop environment: selected work, a di
 - Keyboard command palette and a safe simulated terminal
 - Hash-based deep links that work on GitHub Pages project sites
 - Local-first personal content and no runtime API calls
+- English / Simplified Chinese interface, translated notes, and persistent language preference
+- GitHub profile and seven public repository links, including explicit fork labels
 
 ## Stack
 
@@ -41,9 +43,23 @@ npm run build
 npm run preview
 ```
 
-`npm run build` also generates the static SEO files. End-to-end tests exist as a local command (`npm run test:e2e`) but are intentionally not part of the initial Pages deployment workflow.
+`npm run build` also generates the static SEO files. The separate **Validate changes** workflow runs type checking, lint, unit tests, a repository-subpath build, and desktop/mobile browser tests on pull requests and pushes to `main`. It does not require GitHub Pages to be enabled. The Pages deployment workflow remains separate.
+
+For browser tests, install Chromium once with `npx playwright install chromium`, then run `npm run test:e2e`. To use an installed Edge browser in PowerShell, run `$env:PW_CHANNEL='msedge'` first. The browser tests cover navigation, accessibility, focus restoration, and keyboard escape from terminal completion.
+
+When testing a subpath build locally, keep `VITE_BASE_PATH` set to the same value for both `npm run build` and `npm run preview` (for example, `/weblog/`), then open that subpath in the preview server.
 
 ## Configuration
+
+### Languages and GitHub
+
+Use the **中 / EN** button in the header to switch languages. System settings also provide language controls while a window is open. On the first visit, Chinese browser locales select Simplified Chinese; other locales select English. An explicit choice takes priority and is saved locally. Switching languages keeps window state and hash routes intact. Search accepts English and Chinese titles.
+
+Interface translations are in `src/i18n/zh.json`; Chinese Markdown articles are in `src/i18n/notes-zh.ts`. English remains the source language. Add translations alongside new content; technical names, commands, URLs and code samples are preserved.
+
+The configured profile is [PaoPao1021](https://github.com/PaoPao1021). `src/data/github-repositories.json` contains the public repository snapshot fetched on September 20, 2026. The project window displays those repositories first; the original template studies remain inside a separate collapsible section. The command palette also searches repository names. All repository links open GitHub directly; no API token or runtime fetch is required.
+
+To add or refresh repositories, update the snapshot's `name`, `description`, `url`, `language`, `fork`, and `archived` fields from public GitHub metadata. Keep the snapshot date in `GitHubRepositories.tsx` and its translated label current. Optional English translations of Chinese repository descriptions live in that component. This is a static list, not a live sync; use **All repositories** for the current GitHub listing.
 
 Personal metadata lives in [`src/config/site.ts`](src/config/site.ts):
 

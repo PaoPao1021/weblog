@@ -3,9 +3,10 @@ import AxeBuilder from '@axe-core/playwright';
 
 test('home, project reading and deep-link refresh', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: "I'm Your Name." })).toBeVisible();
+  await expect(page.getByRole('heading', { name: "I'm PaoPao1021." })).toBeVisible();
   await page.getByRole('main').getByRole('button', { name: 'Projects' }).click();
   await expect(page.getByRole('dialog', { name: 'Projects', exact: true })).toBeVisible();
+  await page.getByText('Interface studies', { exact: true }).click();
   await page.locator('a,button').filter({ hasText: 'Project One' }).first().click();
   await expect(page).toHaveURL(/#\/projects\/project-one/);
   await page.reload();

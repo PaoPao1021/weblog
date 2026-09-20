@@ -48,7 +48,7 @@
   -webkit-backdrop-filter: blur(22px) saturate(1.5);
   backdrop-filter: blur(22px) saturate(1.5);
   box-shadow: var(--glass-depth);
-  transition: transform .18s cubic-bezier(0.2, 0.8, 0.2, 1), background .18s, box-shadow .18s;
+  transition: background .18s, box-shadow .18s;
 }
 .hero-app:active, .search-trigger:active, .glass-button:active {
   transform: scale(0.975);
@@ -93,7 +93,7 @@
   border-radius: 50%;
   background: linear-gradient(145deg, var(--highlight), var(--glass-control));
   border: 1px solid var(--glass-edge);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .75), var(--glass-depth);
+  box-shadow: inset 0 1px var(--highlight), var(--glass-depth);
   pointer-events: none;
 }
 .dock-terminal .dock-icon { background: transparent; color: var(--text-muted); border: 0; }
@@ -162,12 +162,14 @@
   color: var(--text);
 }
 .compact .dock { padding: 9px 13px; }
-.compact .dock-selection { border-radius: 18px; }
+.compact .dock-selection { border-radius: 18px; inset: -1px 0; }
 .compact .dock-icon, .compact .dock-label { position: relative; z-index: 1; }
+.compact .dock-label { inset: auto; translate: none; background: none; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; line-height: 1.2; color: var(--text-muted); }
+.compact .dock-item.active .dock-label { color: var(--accent); font-weight: 600; }
 .compact .glass-window.is-sheet { padding: 0; background: var(--bg); backdrop-filter: none; }
 .compact .window-titlebar { background: var(--glass-chrome); border-bottom: 1px solid var(--border); }
 .compact .window-content { background: var(--glass-reading); border: 0; border-radius: 0; }
-.compact .window-control { min-width: 36px; min-height: 36px; border-radius: 50%; }
+.compact .window-control { min-width: 44px; min-height: 44px; border-radius: 50%; }
 .compact .window-control::before { inset: -4px; }
 .compact .glass-window::before, .compact .glass-window::after { display: none; }
 @media (max-width: 600px) { .hero-app { padding-inline: 17px; }.dock { gap: 7px; } }

@@ -1,0 +1,58 @@
+[
+  {
+    "name": "weblog",
+    "description": null,
+    "url": "https://github.com/PaoPao1021/weblog",
+    "language": "TypeScript",
+    "fork": false,
+    "archived": false
+  },
+  {
+    "name": "expense-tracker",
+    "description": "轻记账 — 玻璃态视觉风格的网页记账本（React + Vite + Tailwind，可安装 PWA）",
+    "url": "https://github.com/PaoPao1021/expense-tracker",
+    "language": "TypeScript",
+    "fork": false,
+    "archived": false
+  },
+  {
+    "name": "Love-Space-Standalone-App",
+    "description": "面向两位固定用户的情侣应用，基于 Flutter、Spring Boot 和 MySQL，支持 Android 与 iPhone 主屏幕 PWA。",
+    "url": "https://github.com/PaoPao1021/Love-Space-Standalone-App",
+    "language": "Dart",
+    "fork": false,
+    "archived": false
+  },
+  {
+    "name": "LearnTrack",
+    "description": "本地优先的学习时间账本与自我量化工具，支持专注计时、统计分析、热力日历、学习路线、离线使用与私有同步。",
+    "url": "https://github.com/PaoPao1021/LearnTrack",
+    "language": "TypeScript",
+    "fork": false,
+    "archived": false
+  },
+  {
+    "name": "LoveSpace",
+    "description": null,
+    "url": "https://github.com/PaoPao1021/LoveSpace",
+    "language": "JavaScript",
+    "fork": false,
+    "archived": false
+  },
+  {
+    "name": "Asterline",
+    "description": "Local-first terminal workspace for coordinating Codex, Claude, Grok, and Agy.",
+    "url": "https://github.com/PaoPao1021/Asterline",
+    "language": null,
+    "fork": true,
+    "archived": false
+  },
+  {
+    "name": "sanke-end",
+    "description": null,
+    "url": "https://github.com/PaoPao1021/sanke-end",
+    "language": "C++",
+    "fork": false,
+    "archived": false
+  }
+]

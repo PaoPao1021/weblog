@@ -13,7 +13,7 @@ describe('parseCommand', () => {
     expect(parseCommand('theme', 'dark').lines?.[0]).toContain('dark');
     const github = parseCommand('github');
     expect(github.lines).toBeDefined();
-    expect(github.link).toBeUndefined();
+    expect(github.link?.href).toBe('https://github.com/PaoPao1021');
   });
 
   it('returns the simulated hiring response and unknown command guidance', () => {

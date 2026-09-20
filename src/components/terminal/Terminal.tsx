@@ -1,3 +1,4 @@
+import { useLocale } from '../../i18n/context';
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { siteConfig } from '../../config/site';
 import type { ThemeMode } from '../../config/site';
@@ -19,6 +20,7 @@ const MAX_HISTORY = 40;
 const MAX_OUTPUT = 80;
 
 export default function Terminal({ theme, setTheme }: TerminalProps) {
+  const { t } = useLocale();
   const [value, setValue] = useState('');
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number | null>(null);
@@ -68,11 +70,14 @@ export default function Terminal({ theme, setTheme }: TerminalProps) {
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.nativeEvent.isComposing) return;
     if (event.key === 'Tab') {
-      event.preventDefault();
+      if (event.shiftKey || event.ctrlKey || event.metaKey || event.altKey) return;
       const current = value.trimStart().toLowerCase();
       if (!current) return;
       const match = availableCommands.find((c) => c.startsWith(current));
-      if (match) setValue(match);
+      if (match && match !== value) {
+        event.preventDefault();
+        setValue(match);
+      }
       return;
     }
     if (event.key === 'ArrowUp') {
@@ -97,7 +102,7 @@ export default function Terminal({ theme, setTheme }: TerminalProps) {
   }
 
   return (
-    <section className="terminal-shell" aria-label="Interactive portfolio terminal">
+    <section className="terminal-shell" aria-label={t("Interactive portfolio terminal")}>
       <div className="terminal-body" ref={outputRef} onClick={(event) => {
         if (event.target === event.currentTarget) inputRef.current?.focus();
       }} onScroll={(event) => {
@@ -106,17 +111,17 @@ export default function Terminal({ theme, setTheme }: TerminalProps) {
       }}>
         <div className="terminal-welcome">
           <span className="terminal-logo">▣</span>
-          <div><strong>{siteConfig.name}</strong><span>personal terminal · theme: {theme}</span></div>
+          <div><strong>{siteConfig.name}</strong><span>{t("personal terminal · theme:")} {t(theme)}</span></div>
         </div>
-        <p className="terminal-hint">Type <kbd>help</kbd> to see what’s available. Press <kbd>Tab</kbd> to autocomplete.</p>
+        <p className="terminal-hint">{t("Type")} <kbd>help</kbd> {t("to see what’s available. Press")} <kbd>Tab</kbd> {t("to autocomplete, then again to move focus.")} <kbd>Shift+Tab</kbd> {t("moves back.")}</p>
         {output.map((entry) => <div className="terminal-entry" key={entry.id}>
           <div className="terminal-command"><span>visitor@portfolio <b>~</b> %</span>{entry.command}</div>
-          {entry.result.lines?.map((line, index) => <p key={index}>{line}</p>)}
+          {entry.result.lines?.map((line, index) => <p key={index}>{t(line)}</p>)}
           {entry.result.link && <a href={entry.result.link.href} target="_blank" rel="noreferrer noopener">{entry.result.link.label}</a>}
         </div>)}
         <form className="terminal-form" onSubmit={submit}>
           <label htmlFor="terminal-command" className="terminal-prompt">visitor@portfolio <b>~</b> %</label>
-          <input id="terminal-command" ref={inputRef} value={value} onChange={(event) => { setValue(event.target.value); setHistoryIndex(null); }} onKeyDown={handleKeyDown} autoComplete="off" autoCapitalize="none" spellCheck={false} aria-label="Terminal command" />
+          <input id="terminal-command" ref={inputRef} value={value} onChange={(event) => { setValue(event.target.value); setHistoryIndex(null); }} onKeyDown={handleKeyDown} autoComplete="off" autoCapitalize="none" spellCheck={false} aria-label={t("Terminal command")} />
         </form>
       </div>
     </section>
