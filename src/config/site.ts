@@ -1,8 +1,8 @@
 export type ThemeMode = 'light' | 'dark' | 'system';
 
 export const siteConfig = {
-  name: 'Your Name',
-  username: 'yourname',
+  name: 'PaoPao1021',
+  username: 'PaoPao1021',
   description: 'A personal space for software, ideas, and things in progress.',
   siteUrl: 'https://paopao1021.github.io/weblog/' as string | null,
   github: 'https://github.com/PaoPao1021' as string | null,

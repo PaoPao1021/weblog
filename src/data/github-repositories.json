@@ -1,0 +1,74 @@
+[
+  {
+    "archived": false,
+    "description": null,
+    "fork": false,
+    "language": "Python",
+    "name": "mahjong-jev-advisor",
+    "url": "https://github.com/PaoPao1021/mahjong-jev-advisor"
+  },
+  {
+    "archived": false,
+    "description": null,
+    "fork": false,
+    "language": "JavaScript",
+    "name": "LoveSpace",
+    "url": "https://github.com/PaoPao1021/LoveSpace"
+  },
+  {
+    "archived": false,
+    "description": null,
+    "fork": true,
+    "language": null,
+    "name": "chat1",
+    "url": "https://github.com/PaoPao1021/chat1"
+  },
+  {
+    "archived": false,
+    "description": "本地优先的学习时间账本与自我量化工具，支持专注计时、统计分析、热力日历、学习路线、离线使用与私有同步。",
+    "fork": false,
+    "language": "TypeScript",
+    "name": "LearnTrack",
+    "url": "https://github.com/PaoPao1021/LearnTrack"
+  },
+  {
+    "archived": false,
+    "description": null,
+    "fork": false,
+    "language": "TypeScript",
+    "name": "weblog",
+    "url": "https://github.com/PaoPao1021/weblog"
+  },
+  {
+    "archived": false,
+    "description": "轻记账 — 玻璃态视觉风格的网页记账本（React + Vite + Tailwind，可安装 PWA）",
+    "fork": false,
+    "language": "TypeScript",
+    "name": "expense-tracker",
+    "url": "https://github.com/PaoPao1021/expense-tracker"
+  },
+  {
+    "archived": false,
+    "description": "面向两位固定用户的情侣应用，基于 Flutter、Spring Boot 和 MySQL，支持 Android 与 iPhone 主屏幕 PWA。",
+    "fork": false,
+    "language": "Dart",
+    "name": "Love-Space-Standalone-App",
+    "url": "https://github.com/PaoPao1021/Love-Space-Standalone-App"
+  },
+  {
+    "archived": false,
+    "description": "Local-first terminal workspace for coordinating Codex, Claude, Grok, and Agy.",
+    "fork": true,
+    "language": null,
+    "name": "Asterline",
+    "url": "https://github.com/PaoPao1021/Asterline"
+  },
+  {
+    "archived": false,
+    "description": null,
+    "fork": false,
+    "language": "C++",
+    "name": "sanke-end",
+    "url": "https://github.com/PaoPao1021/sanke-end"
+  }
+]

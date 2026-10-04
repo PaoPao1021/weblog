@@ -43,3 +43,12 @@ No icon animation loops while idle. Reduced-motion disables decorative transform
 ## Brand mark
 
 The header uses an original two-window SVG mark in a 38px glass tile, with a two-line wordmark. The rear frame represents the desktop; the foreground pane represents the work within it. The same geometry is used in `public/favicon.svg`. `Brand.tsx` owns the home action and accessible label, and `brand.css` owns its presentation. Hover moves only the inner pane by 1px, leaving the hit area stationary. Keyboard focus remains visible and reduced-motion disables the internal movement.
+
+## Visual refinement — September 2026
+
+- Keep the centered introduction, with a clear greeting/title/description hierarchy and balanced title wrapping. Move the work-in-progress signature below the links to let the name lead.
+- Keep glass on navigation and window chrome. Project and note cards use a stable reading surface without their own backdrop blur. Dark edges use restrained highlights instead of bright outlines.
+- The header offers a labelled System → Light → Dark → System theme cycle, alongside search. Both remain 44px touch targets on compact screens.
+- Compact Dock icons and labels form one vertical group inside each button; the active lens supplies selection feedback without a second indicator beneath it.
+- Use one transform owner for primary button feedback; preserve keyboard focus indicators and disable decorative displacement for reduced motion. Content is visible from the first frame.
+- Reading links are underlined, card focus rings remain inside clipped surfaces, and compact filters/close controls have larger hit areas.

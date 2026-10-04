@@ -43,11 +43,11 @@
   --glass-chrome: rgba(24, 34, 48, .58);
   --glass-control: rgba(35, 49, 68, .5);
   --glass-control-hover: rgba(48, 66, 92, .65);
-  --glass-edge: rgba(225, 240, 255, .42);
+  --glass-edge: rgba(225, 240, 255, .24);
   --glass-edge-dim: rgba(110, 150, 195, .15);
   --glass-specular: rgba(215, 235, 255, .55);
-  --glass-rim: linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.08) 35%, rgba(126, 182, 246, 0.05) 55%, rgba(200, 225, 255, 0.28) 100%);
-  --glass-depth: inset 0 1px 1.5px rgba(225, 242, 255, .25), inset 0 0 0 1px rgba(225, 242, 255, .1), 0 12px 32px -10px rgba(0, 0, 0, .65);
+  --glass-rim: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.04) 35%, rgba(126, 182, 246, 0.03) 55%, rgba(200, 225, 255, 0.12) 100%);
+  --glass-depth: inset 0 1px 1px rgba(225, 242, 255, .12), 0 12px 32px -10px rgba(0, 0, 0, .5);
   --highlight: rgba(210, 230, 255, .16);
   --shadow: 0 32px 90px -20px rgba(0, 0, 0, .75), 0 6px 24px rgba(0, 0, 0, .35);
   --code: #182230;

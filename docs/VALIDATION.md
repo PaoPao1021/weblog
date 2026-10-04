@@ -33,3 +33,7 @@ GitHub profile and Pages URLs are configured for `PaoPao1021`. Profile navigatio
 ## Pre-commit review — 2026-10-04
 
 Reviewed the accumulated source changes, static verification script, regression tests, and light/dark desktop screenshots. Replaced the shared star icon with a dedicated Brand component and matching favicon; removed obsolete brand styles and corrected the README's unavailable-link behavior. No blocking findings remain in this review. Desktop checks include the Home label alignment and brand navigation back from an open project. September Lighthouse metrics remain historical.
+
+## Pages integration — 2026-10-04
+
+Merged remote desktop widgets, Control Center, localization, wallpaper controls, and repository navigation with the local brand and interaction fixes. Refreshed the public GitHub repository snapshot to nine repositories. Merge validation: 18 unit tests and 45 browser tests passed, with nine desktop-only cases skipped on the mobile project. Type checking, ESLint, production build, and Pages subpath verification passed. Verified brand home navigation and real GitHub destinations in both language-capable layouts.

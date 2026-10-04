@@ -1,47 +1,133 @@
-import { useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from 'framer-motion';
+import { useLocale } from '../../i18n/context';
+import { useRef, useState } from 'react';
+import { motion, useMotionValue, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import { useDesktopMotion } from '../../hooks/useDesktopMotion';
+import { AnimatedIcon } from '../ui/AnimatedIcon';
 import { apps } from '../../app/appRegistry';
 import type { AppId, Navigate } from '../../app/types';
 import type { DesktopState } from '../../app/windowState';
-import { useDesktopMotion } from '../../hooks/useDesktopMotion';
-import { AnimatedIcon } from '../ui/AnimatedIcon';
+import { synth } from '../../utils/audioSynth';
 
-type DockApp = 'home' | Exclude<AppId, 'system'>;
-interface DockItemProps { id: DockApp; active: boolean; opened: boolean; enabled: boolean; mouseX: MotionValue<number>; onOpen: () => void }
-
-function DockItem({ id, active, opened, enabled, mouseX, onOpen }: DockItemProps) {
+function DockButton({
+  id,
+  title,
+  isActive,
+  isOpened,
+  isBouncing,
+  onClick,
+  mouseX,
+  reducedMotion,
+  selected,
+}: {
+  id?: Exclude<AppId, 'system'>;
+  title: string;
+  isActive: boolean;
+  isOpened?: boolean;
+  isBouncing?: boolean;
+  onClick: () => void;
+  mouseX: MotionValue<number>;
+  reducedMotion: boolean | null;
+  selected: React.ReactNode;
+}) {
   const ref = useRef<HTMLButtonElement>(null);
-  const influence = useTransform(mouseX, value => {
-    if (!enabled || !Number.isFinite(value) || !ref.current) return 0;
-    const rect = ref.current.getBoundingClientRect();
-    return Math.max(0, 1 - Math.abs(value - rect.left - rect.width / 2) / 105) ** 2;
+  const distance = useTransform(mouseX, (val: number) => {
+    const bounds = ref.current?.getBoundingClientRect();
+    if (!bounds) return Infinity;
+    return val - (bounds.x + bounds.width / 2);
   });
-  const scale = useSpring(useTransform(influence, value => 1 + value * 0.14), { stiffness: 440, damping: 32, mass: 0.3 });
-  const y = useSpring(useTransform(influence, value => -value * 4), { stiffness: 440, damping: 32, mass: 0.3 });
-  const title = id === 'home' ? 'Home' : apps[id].title;
-  return <motion.button ref={ref}
-    className={`dock-item dock-${id} ${active ? 'active' : ''} ${opened ? 'opened' : ''}`}
-    style={{ scale: enabled ? scale : 1, y: enabled ? y : 0 }}
-    whileTap={enabled ? { scale: 0.94, y: 0 } : undefined}
-    transition={{ type: 'spring', stiffness: 480, damping: 32 }}
-    aria-label={title} aria-current={active ? 'page' : undefined} onClick={onOpen}
-  >
-    {active && <motion.span className="dock-selection" layoutId={enabled ? 'dock-selection' : undefined} transition={{ type: 'spring', stiffness: 460, damping: 38 }} />}
-    <span className="dock-icon"><AnimatedIcon name={id} size={23} strokeWidth={1.65} /></span>
-    <span className="dock-label">{title}</span>
-    <span className="dock-indicator" />
-  </motion.button>;
+
+  const scaleSync = useTransform(distance, [-100, 0, 100], [1, 1.14, 1]);
+  const ySync = useTransform(distance, [-100, 0, 100], [0, -4, 0]);
+
+  const scale = useSpring(scaleSync, { mass: 0.1, stiffness: 240, damping: 16 });
+  const y = useSpring(ySync, { mass: 0.1, stiffness: 240, damping: 16 });
+
+  return (
+    <motion.button
+      ref={ref}
+      style={reducedMotion ? undefined : { scale, y }}
+      animate={isBouncing && !reducedMotion ? { y: [0, -12, 0, -6, 0] } : undefined}
+      transition={isBouncing ? { duration: 0.6, ease: 'easeInOut' } : undefined}
+      whileTap={{ scale: reducedMotion ? 1 : 0.94 }}
+      className={`dock-item ${id ? `dock-${id}` : 'dock-home'} ${isActive ? 'active' : ''} ${isOpened ? 'opened' : ''}`}
+      aria-label={title}
+      aria-current={isActive ? 'page' : undefined}
+      onClick={onClick}
+    >
+      {isActive && selected}
+      <span className="dock-icon">
+        <AnimatedIcon name={id ?? 'home'} size={23} strokeWidth={1.65} />
+      </span>
+      <span className="dock-label">{title}</span>
+      <span className="dock-indicator" />
+    </motion.button>
+  );
 }
 
 export default function Dock({ state, navigate }: { state: DesktopState; navigate: Navigate }) {
+  const { t } = useLocale();
   const enabled = useDesktopMotion();
+  const reducedMotion = !enabled;
   const mouseX = useMotionValue(Infinity);
+  const [bouncingApp, setBouncingApp] = useState<AppId | null>(null);
+
+  const selected = (
+    <motion.span
+      className="dock-selection"
+      layoutId={reducedMotion ? undefined : 'dock-selection'}
+      transition={{ type: 'spring', stiffness: 460, damping: 38 }}
+    />
+  );
   const ids: Exclude<AppId, 'system'>[] = ['projects', 'notes', 'about', 'terminal'];
-  return <nav className="dock glass-panel" aria-label="Application dock"
-    onPointerMove={event => { if (enabled && event.pointerType === 'mouse') mouseX.set(event.clientX); }}
-    onPointerLeave={() => mouseX.set(Infinity)}>
-    <DockItem id="home" active={state.active === null} opened={false} enabled={enabled} mouseX={mouseX} onOpen={() => navigate(null)} />
-    <div className="dock-divider" />
-    {ids.map(id => <DockItem key={id} id={id} active={state.active === id} opened={state.windows.some(win => win.app === id)} enabled={enabled} mouseX={mouseX} onOpen={() => navigate(id, state.windows.find(win => win.app === id)?.item)} />)}
-  </nav>;
+
+  const handleAppClick = (id: AppId) => {
+    synth.playTick();
+    const isOpened = state.windows.some((w) => w.app === id);
+    if (!isOpened) {
+      setBouncingApp(id);
+      setTimeout(() => setBouncingApp(null), 700);
+    }
+    navigate(id, state.windows.find((w) => w.app === id)?.item);
+  };
+
+  const handleHomeClick = () => {
+    synth.playTick();
+    navigate(null);
+  };
+
+  return (
+    <nav
+      className="dock glass-panel"
+      aria-label={t('Application dock')}
+      onPointerMove={(e) => { if (enabled && e.pointerType === 'mouse') mouseX.set(e.clientX); }}
+      onPointerLeave={() => mouseX.set(Infinity)}
+    >
+      <DockButton
+        title={t('Home')}
+        isActive={state.active === null}
+        onClick={handleHomeClick}
+        mouseX={mouseX}
+        reducedMotion={reducedMotion}
+        selected={selected}
+      />
+      <div className="dock-divider" />
+      {ids.map((id) => {
+        const opened = state.windows.some((w) => w.app === id);
+        return (
+          <DockButton
+            key={id}
+            id={id}
+            title={t(apps[id].title)}
+            isActive={state.active === id}
+            isOpened={opened}
+            isBouncing={bouncingApp === id}
+            onClick={() => handleAppClick(id)}
+            mouseX={mouseX}
+            reducedMotion={reducedMotion}
+            selected={selected}
+          />
+        );
+      })}
+    </nav>
+  );
 }

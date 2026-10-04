@@ -15,3 +15,5 @@
   .wordmark:is(:hover,:focus-visible) .brand-point { transform: translateY(1px); }
   .wordmark:active .brand-pane, .wordmark:active .brand-line { transform: translate(0,0); }
 }
+
+@media (max-width: 360px) { .wordmark-copy { display: none; } }

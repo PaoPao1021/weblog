@@ -3,12 +3,13 @@ import AxeBuilder from '@axe-core/playwright';
 
 test('home, project reading and deep-link refresh', async ({ page }, testInfo) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: "I'm Your Name." })).toBeVisible();
+  await expect(page.getByRole('heading', { name: "I'm PaoPao1021." })).toBeVisible();
   await expect(page.locator('.hero-inner')).toHaveCSS('opacity', '1');
   if (process.env.CAPTURE_SCREENSHOTS === '1' && testInfo.project.name === 'desktop') await page.screenshot({ path: 'docs/screenshots/desktop-light.png' });
   await page.getByRole('main').getByRole('button', { name: 'Projects' }).click();
   await expect(page.getByRole('dialog', { name: 'Projects', exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Read Project One' })).toBeVisible();
+  await page.getByText('Interface studies', { exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Read project Project One' })).toBeVisible();
   if (process.env.CAPTURE_SCREENSHOTS === '1' && testInfo.project.name === 'desktop') await page.screenshot({ path: 'docs/screenshots/projects-light.png' });
   await page.locator('a,button').filter({ hasText: 'Project One' }).first().click();
   await expect(page).toHaveURL(/#\/projects\/project-one/);
@@ -16,7 +17,7 @@ test('home, project reading and deep-link refresh', async ({ page }, testInfo) =
   await expect(page.getByRole('heading', { name: 'Overview', exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   if (testInfo.project.name === 'desktop') {
-    await page.getByRole('button', { name: 'yourname — Personal OS home', exact: true }).click();
+    await page.getByRole('button', { name: 'PaoPao1021 — Home', exact: true }).click();
     await expect(page).toHaveURL(/#\/$/);
     await expect(page.getByRole('dialog', { name: 'Projects', exact: true })).toBeHidden();
     await expect(page.getByRole('main').getByRole('button', { name: 'Projects', exact: true })).toBeVisible();

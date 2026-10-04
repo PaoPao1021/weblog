@@ -28,7 +28,8 @@ test('navigation stays inside the viewport and mobile labels stay inside the doc
     }
   }
   await page.getByRole('main').getByRole('button', { name: 'Projects' }).click();
-  await expect(page.getByRole('button', { name: 'Read Project One' })).toBeVisible();
+  await page.getByText('Interface studies', { exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Read project Project One' })).toBeVisible();
   if (capture) await page.screenshot({ path: 'docs/screenshots/projects-light.png' });
   await page.getByRole('navigation', { name: 'Application dock' }).getByRole('button', { name: 'Home', exact: true }).click();
   await page.emulateMedia({ colorScheme: 'dark' });
