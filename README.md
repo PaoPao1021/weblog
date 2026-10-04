@@ -2,7 +2,9 @@
 
 A personal homepage shaped like a small desktop environment: selected work, a digital garden, a compact profile, command palette, and a simulated terminal. It is a static React application built to publish on GitHub Pages without a backend.
 
-> Screenshot placeholder: add a desktop overview image here after making the site your own.
+![Personal OS desktop](docs/screenshots/desktop-light.png)
+
+[Dark appearance](docs/screenshots/desktop-dark.png) · [Selected projects](docs/screenshots/projects-light.png)
 
 ## Features
 
@@ -11,6 +13,7 @@ A personal homepage shaped like a small desktop environment: selected work, a di
 - Projects with detail views and local SVG cover art
 - Markdown-powered notes with tag filtering, related notes, GFM tables, and code-copy controls
 - Keyboard command palette and a safe simulated terminal
+- Desktop pointer-responsive controls, distance-aware Dock, and subtle animated Lucide icons
 - Hash-based deep links that work on GitHub Pages project sites
 - Local-first personal content and no runtime API calls
 
@@ -24,7 +27,7 @@ A personal homepage shaped like a small desktop environment: selected work, a di
 
 ## Getting started
 
-Use Node.js 22 or newer.
+Use Node.js 22.18 or newer (`.nvmrc` selects Node 22).
 
 ```bash
 npm install
@@ -38,17 +41,22 @@ npm run typecheck
 npm run lint
 npm run test
 npm run build
+npm run test:pages
 npm run preview
 ```
 
 `npm run build` also generates the static SEO files. End-to-end tests exist as a local command (`npm run test:e2e`) but are intentionally not part of the initial Pages deployment workflow.
+
+For browser tests, install Chromium once with `npx playwright install chromium`, then run `npm run test:e2e`. To use an installed Google Chrome instead, run `PW_CHANNEL=chrome npm run test:e2e`. Add `-- --project=desktop` to run just the desktop checks.
+
+`npm run test:pages` verifies a production build served from `/pages-check/` with an ordinary static server. It checks asset and SEO paths, hash-route entry delivery, and genuine 404s without rewrite rules, then restores the normal production build. Avoid running it concurrently with another production build.
 
 ## Configuration
 
 Personal metadata lives in [`src/config/site.ts`](src/config/site.ts):
 
 - Replace `name`, `username`, hero text, About copy, and the Currently section.
-- Set `github`, `email`, and `resume` when those destinations are ready. `null` renders an honest “Not configured” state.
+- GitHub currently links to [PaoPao1021](https://github.com/PaoPao1021). Set `email` and `resume` when ready. Unconfigured email and resume controls show an unavailable message on the home screen; About displays their configuration status.
 - Set `siteUrl` to the final public URL before publishing so canonical and social metadata can be generated.
 - Update `version` and `lastUpdated` when releasing meaningful changes.
 
@@ -57,6 +65,8 @@ Selected work is stored in [`src/data/projects.ts`](src/data/projects.ts). Each 
 Notes are local Markdown strings in [`src/data/notes.ts`](src/data/notes.ts). Add a unique `id`, ISO date, short description, tags, and Markdown content. Notes use tags for filtering and for choosing related reading.
 
 Theme tokens and content typography are kept in `src/styles/`; adjust these instead of scattering colors through individual components. Assets should go through `assetUrl()` so they work from both a site root and a repository subpath.
+
+See [architecture](docs/ARCHITECTURE.md) and [material / motion decisions](docs/DESIGN.md) for module responsibilities and the Liquid Glass reference adaptations. Desktop motion uses `interactions.css`; reduced-motion preferences are respected throughout.
 
 ## Deployment to GitHub Pages
 
@@ -70,6 +80,8 @@ Before the first deployment:
 4. Push to `main` or run the **Deploy GitHub Pages** workflow manually.
 
 The workflow reads the base path from `actions/configure-pages`, passes it to Vite as `VITE_BASE_PATH`, and sets `SITE_URL` from the same Pages configuration. This covers both root sites and project repositories without hard-coding a repository name.
+
+This repository's configured Pages address is `https://paopao1021.github.io/weblog/`. Changes in the local workspace require a push to `main` before the deployment workflow publishes them.
 
 For a custom domain, configure the domain in GitHub Pages, then set `siteUrl` to the final HTTPS custom-domain URL. Keep the Pages workflow enabled; it will continue to provide the correct asset base path.
 
@@ -102,8 +114,9 @@ scripts/                 build-time SEO generation
 ## Customization checklist
 
 - [ ] Replace `Your Name` and all placeholder prose.
-- [ ] Add GitHub, email, resume, and final `siteUrl` values.
+- [x] Link the GitHub profile and configure the Pages site URL.
+- [ ] Add email and resume.
 - [ ] Replace project records, covers, screenshots, and optional links.
 - [ ] Add notes that reflect your own interests and work.
-- [ ] Capture and add real screenshots to this README.
+- [x] Capture and add interface screenshots to this README.
 - [ ] Enable GitHub Pages and confirm the deployed subpath in a production browser.

@@ -98,6 +98,8 @@
 }
 .dock-terminal .dock-icon { background: transparent; color: var(--text-muted); border: 0; }
 .dock-item.active .dock-icon { color: var(--accent); }
+.dock-item:focus:not(:focus-visible) { outline: none; }
+.dock-item:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 50%; }
 .dock-indicator { bottom: -6px; }
 .dock-label {
   border-radius: 999px;
@@ -163,7 +165,10 @@
 }
 .compact .dock { padding: 9px 13px; }
 .compact .dock-selection { border-radius: 18px; }
+.compact .dock-item:focus-visible { border-radius: 18px; }
 .compact .dock-icon, .compact .dock-label { position: relative; z-index: 1; }
+.compact .dock-label,
+.compact .dock-item:is(:hover,:focus-visible) .dock-label { inset: auto; translate: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
 .compact .glass-window.is-sheet { padding: 0; background: var(--bg); backdrop-filter: none; }
 .compact .window-titlebar { background: var(--glass-chrome); border-bottom: 1px solid var(--border); }
 .compact .window-content { background: var(--glass-reading); border: 0; border-radius: 0; }
@@ -174,6 +179,9 @@
 @media (max-width: 360px) { .hero-app { padding-inline: 13px; }.dock { gap: 4px; }.compact .dock { padding-inline: 9px; } }
 @media (prefers-reduced-motion: reduce), (pointer: coarse) {
   .glass-panel::after, .glass-window::after, .project-card::after, .note-card::after { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dock-item:hover .dock-icon, .hero-app:active, .search-trigger:active, .glass-button:active, .hero-app.primary:active, .theme-control button:active { transform: none; }
 }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .glass-panel, .glass-window, .hero-app:not(.primary), .search-trigger, .window-titlebar, .command-panel { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; }

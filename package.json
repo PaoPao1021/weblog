@@ -8,6 +8,7 @@
     "typecheck": "tsc -b",
     "lint": "eslint .",
     "test": "vitest run",
+    "test:pages": "node --experimental-strip-types scripts/verify-pages.ts",
     "test:e2e": "playwright test",
     "build": "tsc -b && vite build && node --experimental-strip-types scripts/generate-seo.ts",
     "preview": "vite preview --host 0.0.0.0"

@@ -45,7 +45,7 @@ export default function System({ theme, setTheme }: { theme: ThemeMode; setTheme
       <div><dt>Color space</dt><dd>{screenInfo.p3 ? 'Display P3 (Wide Color)' : 'sRGB Standard'}</dd></div>
       <div><dt>Optics & Engine</dt><dd>{reducedMotion ? 'Reduced Motion (Standard)' : 'Liquid Glass Active'}</dd></div>
       <div><dt>Currently building</dt><dd>{siteConfig.currently.building}</dd></div>
-      <div><dt>GitHub</dt><dd>{siteConfig.github ? <a href={siteConfig.github} target="_blank" rel="noreferrer noopener">Connected <ArrowUpRight size={12} /></a> : 'Connected'}<small>Demo status · no API connection</small></dd></div>
+      <div><dt>GitHub</dt><dd>{siteConfig.github ? <a href={siteConfig.github} target="_blank" rel="noreferrer noopener">Profile linked <ArrowUpRight size={12} /></a> : 'Not configured'}<small>Profile link · no API connection</small></dd></div>
       <div><dt>Last updated</dt><dd>{siteConfig.lastUpdated}</dd></div>
       <div><dt>Version</dt><dd>Portfolio OS {siteConfig.version}</dd></div>
     </dl>

@@ -1,0 +1,99 @@
+/* One restrained desktop motion language. Text and click targets stay stable. */
+.animated-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; line-height: 0; }
+.animated-icon svg { overflow: visible; }
+.motion-control { --press-x: 50%; --press-y: 50%; }
+/* Never animate a hit area away from a stationary pointer at its edge. */
+.hero-app.motion-control, .hero-app.motion-control:is(:hover,:active), .search-trigger.motion-control:is(:hover,:active) { transform: none; }
+.hero-app.primary:hover { background: linear-gradient(155deg, color-mix(in srgb, var(--text) 88%, var(--accent)), var(--text)); }
+.hero-links :is(a,button) { padding: 8px 10px; border-radius: 9px; }
+.hero-links { gap: 4px; }
+.hero-links :is(a,button):is(:hover,:focus-visible) { background: var(--accent-tint); color: var(--text); }
+.hero-link-status { position: absolute; margin: 8px 0 0; inset-inline: 0; font-size: 11px; color: var(--text-muted); text-align: center; }
+.hero-inner { position: relative; }
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :root { --interaction-ease: cubic-bezier(.2,.8,.2,1); --interaction-duration: 200ms; }
+  .animated-icon, .animated-icon svg, .animated-icon path, .animated-icon circle {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 220ms var(--interaction-ease), opacity 180ms ease, stroke 180ms ease;
+  }
+  .motion-control { transition: box-shadow 180ms ease, border-color 180ms ease; }
+  .hero-app.motion-control:is(:hover,:focus-visible), .search-trigger.motion-control:is(:hover,:focus-visible) { box-shadow: var(--glass-depth), 0 7px 20px -6px rgba(25,46,75,.28); border-color: var(--accent); }
+  .hero-app.primary.motion-control:is(:hover,:focus-visible) { box-shadow: inset 0 1px 1.5px rgba(255,255,255,.45), 0 10px 24px -5px rgba(20,40,65,.45); }
+  .hero-app.motion-control:active, .search-trigger.motion-control:active { box-shadow: inset 0 2px 5px rgba(20,40,65,.22); }
+  .motion-control:active .animated-icon { transform: scale(.92); }
+  .hero-app.motion-control::after, .search-trigger.motion-control::after {
+    content: ''; position: absolute; inset: 1px; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(75px circle at var(--press-x) var(--press-y), var(--glass-specular), transparent 75%);
+    opacity: 0; transition: opacity 180ms ease;
+  }
+  .hero-app.motion-control:is(:hover,:focus-visible)::after, .search-trigger.motion-control:is(:hover,:focus-visible)::after { opacity: .09; }
+  .hero-app.motion-control:active::after, .search-trigger.motion-control:active::after { opacity: .2; }
+  .hero-app > svg:last-child, .hero-links :is(a,button) > svg:last-child, .about-links a > svg:last-child, .project-links a > svg {
+    transition: transform 220ms var(--interaction-ease), opacity 180ms;
+  }
+  .hero-app:is(:hover,:focus-visible) > svg:last-child,
+  .hero-links :is(a,button):is(:hover,:focus-visible) > svg:last-child,
+  .about-links a:is(:hover,:focus-visible) > svg:last-child { transform: translate(2px,-2px); opacity: 1; }
+  .hero-links :is(a,button), .about-links a, .content-back, .note-related button, .project-links a, .note-filter button {
+    transition: color 180ms, background 180ms, border-color 180ms, box-shadow 180ms;
+  }
+  .hero-links :is(a,button) { position: relative; }
+  .hero-links :is(a,button)::after { content: ''; position: absolute; left: 30px; right: 23px; bottom: 4px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; opacity: .4; transition: transform 220ms var(--interaction-ease); }
+  .hero-links :is(a,button):is(:hover,:focus-visible)::after { transform: scaleX(1); }
+  .dock-item:hover .dock-icon { transform: none; }
+  .dock-item { transform-origin: center bottom; }
+  .dock-label { transition: opacity 160ms, translate 220ms var(--interaction-ease), visibility 160ms; }
+  .dock-item.active .dock-indicator { box-shadow: 0 0 0 3px var(--accent-tint); }
+
+  /* Tiny semantic gestures; none loop while the interface is idle. */
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='home'] svg { transform: translateY(-1px); }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='home'] path:first-child { transform: scaleX(.86); }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='projects'] svg { transform: translateY(-1px) rotate(-5deg); }
+  .animated-icon[data-icon='projects'] svg { transform-origin: 20% 90%; }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='notes'] path:nth-child(3) { transform: rotate(-9deg); }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='notes'] path:nth-child(4) { transform: rotate(9deg) translateY(-.5px); }
+  .animated-icon[data-icon='notes'] path { transform-origin: center bottom; }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='about'] circle { transform: translateY(-1px) scale(1.035); }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='about'] path { transform: scaleX(1.05); }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='terminal'] path:first-child { transform: translateX(1px); }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='terminal'] path:nth-child(2) { animation: terminal-caret 720ms ease 1; }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='code'] path:first-child { transform: translateX(1px); }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='code'] path:nth-child(2) { transform: translateX(-1px); }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='document'] path:nth-child(n+3) { animation: ink-reveal 320ms var(--interaction-ease) both; }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='document'] path:nth-child(4) { animation-delay: 40ms; }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='document'] path:nth-child(5) { animation-delay: 80ms; }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='search'] svg { transform: rotate(-8deg) scale(1.06); }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='mail'] path { transform: translateY(-1px) scaleY(.8); }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='github'] svg { transform: translateY(-1px); }
+  :is(button,a):is(:hover,:focus-visible) .animated-icon[data-icon='github'] path:last-child { transform: rotate(-9deg); transform-origin: right center; }
+  .system-trigger .status-dot { transition: transform 260ms var(--interaction-ease), box-shadow 220ms; }
+  .system-trigger:is(:hover,:focus-visible) .status-dot { transform: scale(1.15); box-shadow: 0 0 0 5px var(--accent-tint); }
+  .window-control svg { transition: opacity 150ms, transform 180ms var(--interaction-ease); }
+  .window-control.close:hover svg { transform: rotate(8deg); }
+  .window-control.minimize:hover svg { transform: scaleX(.8); }
+  .window-control.expand:hover svg { transform: scale(1.14); }
+  .window-control:active { transform: scale(.86); }
+  .window-control:focus-visible { outline-offset: 7px; }
+  .content-back svg { transition: transform 180ms var(--interaction-ease); }
+  .content-back:is(:hover,:focus-visible) svg { transform: translateX(-3px); }
+  .note-read svg, .note-related button svg, .command-results li > svg { transition: transform 180ms var(--interaction-ease); }
+  .note-card:focus-within .note-read svg, .note-card:hover .note-read svg,
+  .note-related button:is(:hover,:focus-visible) svg, .command-results li.selected > svg { transform: translate(2px,-2px); }
+  .note-filter button:active, .prose-codebar button:active { scale: .97; }
+  .command-result-icon { transition: background 180ms, color 180ms, transform 200ms var(--interaction-ease); }
+  .command-results li.selected .command-result-icon { color: var(--accent); transform: translateX(1px); }
+  .project-card .project-card-action { transition: transform 200ms var(--interaction-ease), background 180ms; }
+  .project-card:is(:hover,:focus-within) .project-card-action { transform: translate(2px,-2px); background: var(--glass-control-hover); }
+  .about-links a > svg:first-child, .theme-control button svg, .prose-codebar button svg, .system-emblem svg { transition: transform 220ms var(--interaction-ease), opacity 180ms; }
+  .about-links a:is(:hover,:focus-visible) > svg:first-child { transform: translateY(-1px); }
+  .theme-control button:is(:hover,:focus-visible) .lucide-sun { transform: rotate(30deg); }
+  .theme-control button:is(:hover,:focus-visible) .lucide-moon { transform: rotate(-12deg); }
+  .theme-control button:is(:hover,:focus-visible) .lucide-monitor { transform: scale(1.08); }
+  .prose-codebar button:is(:hover,:focus-visible) svg { transform: translateY(-1px) scale(1.05); }
+  .prose-codebar button .lucide-check { animation: ink-reveal 220ms var(--interaction-ease) both; }
+  .system-content:hover .system-emblem svg { transform: scale(1.05); }
+}
+@keyframes terminal-caret { 0%,100% { opacity: 1; } 40%,65% { opacity: .25; } }
+@keyframes ink-reveal { from { transform: translateX(-1px); opacity: .35; } to { transform: translateX(0); opacity: 1; } }

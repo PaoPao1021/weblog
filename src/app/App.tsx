@@ -1,12 +1,15 @@
 import { lazy, Suspense, useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import { Command, Search, Sparkles } from 'lucide-react';
+import { Command } from 'lucide-react';
 import Background from '../components/desktop/Background';
 import Hero from '../components/desktop/Hero';
+import Brand from '../components/desktop/Brand';
 import GlassWindow from '../components/desktop/GlassWindow';
 import Dock from '../components/dock/Dock';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
 import System from '../components/windows/system/System';
+import { AnimatedIcon } from '../components/ui/AnimatedIcon';
+import { MotionButton } from '../components/ui/MotionButton';
 import { useTheme } from '../hooks/useTheme';
 import { useCompact } from '../hooks/useCompact';
 import { desktopReducer, initialDesktop, type DesktopAction } from './windowState';
@@ -66,7 +69,7 @@ export default function App() {
     <Background />
     <div ref={desktopRef} className="desktop-base">
       <a href="#main-content" className="skip-link" onClick={event => { event.preventDefault(); document.getElementById('main-content')?.focus(); }}>Skip to main content</a>
-      <header className="desktop-header"><button className="wordmark" aria-label={`${siteConfig.username} — Personal OS home`} onClick={() => navigate(null)}><span className="wordmark-symbol"><Sparkles size={17} strokeWidth={1.5} /></span><span>{siteConfig.username}<span className="wordmark-slash"> / </span><span className="wordmark-sub">personal space</span></span></button><div className="header-tools"><span className="header-note">A place for things that matter.</span><button className="search-trigger" onClick={() => setPalette(true)} aria-label="Explore — open command palette"><Search size={15} /><span>Explore</span><kbd><Command size={11} /> K</kbd></button></div></header>
+      <header className="desktop-header"><Brand onHome={() => navigate(null)} /><div className="header-tools"><span className="header-note">A place for things that matter.</span><MotionButton className="search-trigger" onClick={() => setPalette(true)} aria-label="Explore — open command palette"><AnimatedIcon name="search" size={15} /><span>Explore</span><kbd><Command size={11} /> K</kbd></MotionButton></div></header>
       <Hero navigate={navigate} />
       <div className="desktop-bottom"><span className="desktop-coordinate">INDEPENDENT BY NATURE.<br /><span>CURIOUS BY DEFAULT.</span></span><button className="system-trigger" onClick={() => navigate('system')}><span className="status-dot" /> ONLINE <span className="system-trigger-divider">/</span><span>V{siteConfig.version}</span></button></div>
     </div>

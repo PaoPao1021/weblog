@@ -1,19 +1,29 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-test('home, project reading and deep-link refresh', async ({ page }) => {
+test('home, project reading and deep-link refresh', async ({ page }, testInfo) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: "I'm Your Name." })).toBeVisible();
+  await expect(page.locator('.hero-inner')).toHaveCSS('opacity', '1');
+  if (process.env.CAPTURE_SCREENSHOTS === '1' && testInfo.project.name === 'desktop') await page.screenshot({ path: 'docs/screenshots/desktop-light.png' });
   await page.getByRole('main').getByRole('button', { name: 'Projects' }).click();
   await expect(page.getByRole('dialog', { name: 'Projects', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Read Project One' })).toBeVisible();
+  if (process.env.CAPTURE_SCREENSHOTS === '1' && testInfo.project.name === 'desktop') await page.screenshot({ path: 'docs/screenshots/projects-light.png' });
   await page.locator('a,button').filter({ hasText: 'Project One' }).first().click();
   await expect(page).toHaveURL(/#\/projects\/project-one/);
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Overview', exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  if (testInfo.project.name === 'desktop') {
+    await page.getByRole('button', { name: 'yourname — Personal OS home', exact: true }).click();
+    await expect(page).toHaveURL(/#\/$/);
+    await expect(page.getByRole('dialog', { name: 'Projects', exact: true })).toBeHidden();
+    await expect(page.getByRole('main').getByRole('button', { name: 'Projects', exact: true })).toBeVisible();
+  }
 });
 
-test('command palette opens notes and theme persists', async ({ page }) => {
+test('command palette opens notes and theme persists', async ({ page }, testInfo) => {
   await page.goto('/');
   await page.getByRole('button', { name: /open command palette/i }).click();
   const search = page.getByRole('combobox');
@@ -27,6 +37,11 @@ test('command palette opens notes and theme persists', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  if (process.env.CAPTURE_SCREENSHOTS === '1' && testInfo.project.name === 'desktop') {
+    await page.getByRole('navigation', { name: 'Application dock' }).getByRole('button', { name: 'Home', exact: true }).click();
+    await expect(page.locator('.hero-inner')).toHaveCSS('opacity', '1');
+    await page.screenshot({ path: 'docs/screenshots/desktop-dark.png' });
+  }
 });
 
 test('terminal commands and home preserve minimized session', async ({ page }) => {

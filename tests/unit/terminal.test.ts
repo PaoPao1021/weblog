@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parseCommand } from '../../src/components/terminal/commands';
+import { siteConfig } from '../../src/config/site';
 
 describe('parseCommand', () => {
   it('normalizes whitespace and exposes the command help', () => {
@@ -13,7 +14,7 @@ describe('parseCommand', () => {
     expect(parseCommand('theme', 'dark').lines?.[0]).toContain('dark');
     const github = parseCommand('github');
     expect(github.lines).toBeDefined();
-    expect(github.link).toBeUndefined();
+    expect(github.link).toEqual(siteConfig.github ? { href: siteConfig.github, label: siteConfig.github } : undefined);
   });
 
   it('returns the simulated hiring response and unknown command guidance', () => {

@@ -4,8 +4,8 @@ export const siteConfig = {
   name: 'Your Name',
   username: 'yourname',
   description: 'A personal space for software, ideas, and things in progress.',
-  siteUrl: null as string | null,
-  github: null as string | null,
+  siteUrl: 'https://paopao1021.github.io/weblog/' as string | null,
+  github: 'https://github.com/PaoPao1021' as string | null,
   email: null as string | null,
   resume: null as string | null,
   hero: {
@@ -24,5 +24,5 @@ export const siteConfig = {
     exploring: 'Small tools, lasting impact',
   },
   version: '1.0.0',
-  lastUpdated: '2026-09-20',
+  lastUpdated: '2026-10-04',
 };
