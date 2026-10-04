@@ -1,6 +1,8 @@
-# Personal OS Portfolio
+# PaoPao1021 · Personal OS
 
 A personal homepage shaped like a small desktop environment: selected work, a digital garden, a compact profile, command palette, and a simulated terminal. It is a static React application built to publish on GitHub Pages without a backend.
+
+[Live website](https://paopao1021.github.io/weblog/) · [Projects](https://paopao1021.github.io/weblog/#/projects) · [GitHub profile](https://github.com/PaoPao1021) · [Source repository](https://github.com/PaoPao1021/weblog) · [All GitHub repositories](https://github.com/PaoPao1021?tab=repositories)
 
 ![Personal OS desktop](docs/screenshots/desktop-light.png)
 
@@ -14,10 +16,15 @@ A personal homepage shaped like a small desktop environment: selected work, a di
 - Markdown-powered notes with tag filtering, related notes, GFM tables, and code-copy controls
 - Keyboard command palette and a safe simulated terminal
 - Desktop pointer-responsive controls, distance-aware Dock, and subtle animated Lucide icons
+- Original two-window brand mark with a matching favicon and keyboard-accessible home action
+- Control Center for appearance, wallpaper, interface sound effects, ambient audio, and a local Do Not Disturb preference
+- Desktop widget with a clock, ambient audio player, focus timer, daily prompt, and locally saved scratchpad
+- Four wallpaper styles: Aurora Glass, Sunset Ember, Misty Forest, and Cosmic Void
+- Desktop context menu, keyboard shortcut help, and terminal commands such as `neofetch` and `cowsay`
 - Hash-based deep links that work on GitHub Pages project sites
 - Local-first personal content and no runtime API calls
 - English / Simplified Chinese interface, translated notes, and persistent language preference
-- GitHub profile and seven public repository links, including explicit fork labels
+- GitHub profile and nine public repository links, including explicit fork labels
 
 ## Stack
 
@@ -29,10 +36,12 @@ A personal homepage shaped like a small desktop environment: selected work, a di
 
 ## Getting started
 
-Use Node.js 22.18 or newer (`.nvmrc` selects Node 22).
+Use Node.js 22.18 or newer (`.nvmrc` selects Node 22). Clone the project and install the locked dependencies:
 
 ```bash
-npm install
+git clone https://github.com/PaoPao1021/weblog.git
+cd weblog
+npm ci
 npm run dev
 ```
 
@@ -49,13 +58,20 @@ npm run preview
 
 `npm run build` also generates the static SEO files. The separate **Validate changes** workflow runs type checking, lint, unit tests, a repository-subpath build, and desktop/mobile browser tests on pull requests and pushes to `main`. It does not require GitHub Pages to be enabled. The Pages deployment workflow remains separate.
 
-For browser tests, install Chromium once with `npx playwright install chromium`, then run `npm run test:e2e`. To use an installed Edge browser in PowerShell, run `$env:PW_CHANNEL='msedge'` first. The browser tests cover navigation, accessibility, focus restoration, and keyboard escape from terminal completion.
+For browser tests, install Chromium once with `npx playwright install chromium`, then run `npm run test:e2e`. To use installed Google Chrome on macOS or Linux, run `PW_CHANNEL=chrome npm run test:e2e`. For installed Edge in PowerShell, set `$env:PW_CHANNEL='msedge'` first. Add `-- --project=desktop` to run only desktop checks. Browser tests cover navigation, accessibility, focus restoration, pointer feedback, Control Center, widgets, language persistence, real repository links, and keyboard escape from terminal completion.
 
 When testing a subpath build locally, keep `VITE_BASE_PATH` set to the same value for both `npm run build` and `npm run preview` (for example, `/weblog/`), then open that subpath in the preview server.
 
-For browser tests, install Chromium once with `npx playwright install chromium`, then run `npm run test:e2e`. To use an installed Google Chrome instead, run `PW_CHANNEL=chrome npm run test:e2e`. Add `-- --project=desktop` to run just the desktop checks.
-
 `npm run test:pages` verifies a production build served from `/pages-check/` with an ordinary static server. It checks asset and SEO paths, hash-route entry delivery, and genuine 404s without rewrite rules, then restores the normal production build. Avoid running it concurrently with another production build.
+
+## Using the desktop
+
+- Click the brand mark or **Home** in the Dock to return to the desktop; open applications from the Dock or homepage buttons.
+- Use **Cmd/Ctrl + K** to search applications, notes, projects, repository names, and appearance commands. Use the arrow keys and Enter to choose a result, and Escape to close.
+- Press **?** outside a text field to open keyboard shortcut help. Right-click the desktop background for its context menu.
+- Open **Control Center** from the header to change appearance, wallpaper, and audio controls. These controls apply within the website.
+- Use the widget tabs to switch between the clock, ambient audio, focus timer, daily prompt, and scratchpad. The scratchpad saves in this browser's local storage.
+- Open **Terminal** and enter `help` for available commands. Commands run in the simulated site terminal.
 
 ## Configuration
 
@@ -65,7 +81,19 @@ Use the **中 / EN** button in the header to switch languages. System settings a
 
 Interface translations are in `src/i18n/zh.json`; Chinese Markdown articles are in `src/i18n/notes-zh.ts`. English remains the source language. Add translations alongside new content; technical names, commands, URLs and code samples are preserved.
 
-The configured profile is [PaoPao1021](https://github.com/PaoPao1021). `src/data/github-repositories.json` contains the public repository snapshot fetched on September 20, 2026. The project window displays those repositories first; the original template studies remain inside a separate collapsible section. The command palette also searches repository names. All repository links open GitHub directly; no API token or runtime fetch is required.
+The configured profile is [PaoPao1021](https://github.com/PaoPao1021). `src/data/github-repositories.json` contains nine public repositories, refreshed on October 4, 2026. The project window displays those repositories first; the original template studies remain inside a separate collapsible section. The command palette also searches repository names. All repository links open GitHub directly; no API token or runtime fetch is required.
+
+| Project | Source |
+| --- | --- |
+| Weblog / Personal OS | [weblog](https://github.com/PaoPao1021/weblog) |
+| Mahjong advisor | [mahjong-jev-advisor](https://github.com/PaoPao1021/mahjong-jev-advisor) |
+| LoveSpace | [LoveSpace](https://github.com/PaoPao1021/LoveSpace) |
+| Chat1 | [chat1](https://github.com/PaoPao1021/chat1) |
+| LearnTrack | [LearnTrack](https://github.com/PaoPao1021/LearnTrack) |
+| Expense tracker | [expense-tracker](https://github.com/PaoPao1021/expense-tracker) |
+| Love Space standalone app | [Love-Space-Standalone-App](https://github.com/PaoPao1021/Love-Space-Standalone-App) |
+| Asterline (fork) | [Asterline](https://github.com/PaoPao1021/Asterline) |
+| Sanke end | [sanke-end](https://github.com/PaoPao1021/sanke-end) |
 
 To add or refresh repositories, update the snapshot's `name`, `description`, `url`, `language`, `fork`, and `archived` fields from public GitHub metadata. Keep the snapshot date in `GitHubRepositories.tsx` and its translated label current. Optional English translations of Chinese repository descriptions live in that component. This is a static list, not a live sync; use **All repositories** for the current GitHub listing.
 
@@ -97,7 +125,7 @@ Before the first deployment:
 
 The workflow reads the base path from `actions/configure-pages`, passes it to Vite as `VITE_BASE_PATH`, and sets `SITE_URL` from the same Pages configuration. This covers both root sites and project repositories without hard-coding a repository name.
 
-This repository's configured Pages address is `https://paopao1021.github.io/weblog/`. Changes in the local workspace require a push to `main` before the deployment workflow publishes them.
+The website is published at [paopao1021.github.io/weblog](https://paopao1021.github.io/weblog/). The October 4, 2026 deployment of `e009c01` succeeded, and the published brand mark and refreshed repository snapshot were verified. For subsequent updates, commit and push to `main`, then check [Deploy GitHub Pages](https://github.com/PaoPao1021/weblog/actions/workflows/deploy.yml). [Validate changes](https://github.com/PaoPao1021/weblog/actions/workflows/checks.yml) runs the separate browser regression checks.
 
 For a custom domain, configure the domain in GitHub Pages, then set `siteUrl` to the final HTTPS custom-domain URL. Keep the Pages workflow enabled; it will continue to provide the correct asset base path.
 
@@ -120,19 +148,28 @@ If an image or JavaScript file 404s after deployment, verify that it is referenc
 src/app/                 routes, providers, and desktop state
 src/components/          desktop, windows, dock, command palette, terminal, shared UI
 src/config/site.ts       personal metadata
-src/data/                projects and notes
+src/data/                projects, notes, and public GitHub repository snapshot
+src/i18n/                locale provider, interface dictionary, and Chinese notes
+src/hooks/               appearance, wallpaper, viewport, and pointer preferences
 src/styles/              theme tokens, layout, and typography
 public/                  local images and other static assets
-scripts/                 build-time SEO generation
-.github/workflows/       GitHub Pages deployment
+scripts/                 build-time SEO generation and Pages subpath verification
+tests/                   unit, browser, accessibility, and interaction checks
+.github/workflows/       GitHub Pages deployment and CI validation
 ```
+
+## Verification
+
+The October 4 merge was checked with TypeScript, ESLint, a production build, and Pages subpath verification. Local tests passed: **18 unit tests** and **45 browser tests**, with nine desktop-only cases skipped in the mobile project. See [validation details](docs/VALIDATION.md) for the tested behavior and historical Lighthouse measurements.
 
 ## Customization checklist
 
-- [ ] Replace `Your Name` and all placeholder prose.
+- [x] Configure the name and username as `PaoPao1021`.
+- [ ] Personalize the remaining About copy and template prose.
 - [x] Link the GitHub profile and configure the Pages site URL.
 - [ ] Add email and resume.
-- [ ] Replace project records, covers, screenshots, and optional links.
+- [x] Link all nine public GitHub repositories.
+- [ ] Replace or remove the optional template interface studies and their covers.
 - [ ] Add notes that reflect your own interests and work.
 - [x] Capture and add interface screenshots to this README.
-- [ ] Enable GitHub Pages and confirm the deployed subpath in a production browser.
+- [x] Enable GitHub Pages and verify the published subpath and assets.
